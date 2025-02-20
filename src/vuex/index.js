@@ -52,6 +52,7 @@ const store = createStore({
       context.dispatch("categorisingTasks", tasks);
     },
 
+    async deleteTask(context, taskId) {
       const responce = await fetch(
         `https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasks/${taskId}.json`,
         { method: "DELETE" }
@@ -67,6 +68,7 @@ const store = createStore({
       //   console.error("Delete failed:", error);
       // }
     },
+  },
   mutations: {
     setTasks(state, payload) {
       state.tasks = payload;
