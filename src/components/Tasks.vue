@@ -4,7 +4,7 @@
   >
     <p :class="{ 'text-red-500': taskDone }">{{ task.description }}</p>
     <div class="">
-      <BaseCrossbutton @click="deleteTask"></BaseCrossbutton>
+      <BaseBinbutton @click="deleteTask"></BaseBinbutton>
       <BaseTickButton @click="taskIsDone"></BaseTickButton>
     </div>
   </div>

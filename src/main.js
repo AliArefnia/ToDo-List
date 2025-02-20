@@ -6,7 +6,7 @@ import App from "./App.vue";
 import router from "./router/index.js";
 import BaseButton from "./components/ui/BaseButton.vue";
 import BaseTickbutton from "./components/ui/BaseTickbutton.vue";
-import BaseCrossbutton from "./components/ui/BaseCrossbutton.vue";
+import BaseBinbutton from "./components/ui/BaseBinbutton.vue";
 
 const app = createApp(App);
 
@@ -15,3 +15,5 @@ app.use(router);
 
 app.mount("#app");
 app.component("BaseButton", BaseButton);
+app.component("BaseTickButton", BaseTickbutton);
+app.component("BaseBinbutton", BaseBinbutton);
