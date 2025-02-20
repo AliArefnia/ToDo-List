@@ -52,6 +52,21 @@ const store = createStore({
       context.dispatch("categorisingTasks", tasks);
     },
 
+      const responce = await fetch(
+        `https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasks/${taskId}.json`,
+        { method: "DELETE" }
+      );
+      const responceData = await responce.json();
+      if (!responce.ok) {
+        console.log("dleete failed");
+      }
+      // Update local state
+      context.commit("removeTask", taskId);
+      console.log("delete done");
+      // catch (error) {
+      //   console.error("Delete failed:", error);
+      // }
+    },
   mutations: {
     setTasks(state, payload) {
       state.tasks = payload;
@@ -59,6 +74,19 @@ const store = createStore({
     removeTask(state, taskId) {
       console.log("get in mutation");
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
+    },
+    setFinishedTasks(state, finishedTasks) {
+      state.finishedTasks = finishedTasks;
+    },
+    setPendingTasks(state, pendingTasks) {
+      state.pendingTasks = pendingTasks;
+    },
+    updateTaskStatus(state, { taskId, isFinished }) {
+      console.log("updatetaskstatus");
+      const task = state.tasks.find((t) => t.id === taskId);
+      if (task) {
+        Object.assign(task, isFinished);
+      }
     },
   },
   getters: {
