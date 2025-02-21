@@ -1,5 +1,7 @@
 <template>
-  <button class="h-7 mx-3 translate-0.5">
+  <button
+    class="h-7 mx-3 translate-0.5 hover:drop-shadow-[0_0_5px_rgba(128,0,0,1)]"
+  >
     <slot
       ><svg
         xmlns="http://www.w3.org/2000/svg"

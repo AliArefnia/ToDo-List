@@ -17,7 +17,7 @@
       </div>
       <ul>
         <li v-for="task in pendingTasks">
-          <Tasks :task="task" :key="task.id"></Tasks>
+          <Tasks :task="task" :key="task.id" class="border-zinc-500"></Tasks>
         </li>
       </ul>
     </section>
@@ -30,7 +30,7 @@
           v-for="task in finishedTasks"
           class="line-through decoration-1 text-neutral-500"
         >
-          <Tasks :task="task" :key="task.id"></Tasks>
+          <Tasks :task="task" :key="task.id" class="border-green-900"></Tasks>
         </li>
       </ul>
     </section>
