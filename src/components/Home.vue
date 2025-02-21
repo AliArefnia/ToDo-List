@@ -27,6 +27,18 @@
           <li v-for="task in pendingTasks">
             <Tasks :task="task" :key="task.id" class="border-zinc-500"></Tasks>
           </li>
+          <p
+            v-if="pendingTasks.length === 0 && finishedTasks.length !== 0"
+            class="text-neutral-600 text-center"
+          >
+            Congrats! You Have no pending Task
+          </p>
+          <p
+            v-if="pendingTasks.length === 0 && finishedTasks.length === 0"
+            class="text-neutral-600 text-center"
+          >
+            You Havn't added any Task
+          </p>
         </ul>
       </Transition>
     </section>
@@ -49,6 +61,12 @@
           >
             <Tasks :task="task" :key="task.id" class="border-green-900"></Tasks>
           </li>
+          <p
+            v-if="finishedTasks.length === 0"
+            class="text-neutral-600 text-center"
+          >
+            You Havn't any Finished Task Yet
+          </p>
         </ul>
       </Transition>
     </section>
@@ -63,6 +81,7 @@ export default {
   },
   computed: {
     pendingTasks() {
+      console.log(this.$store.getters.pendingTasks);
       return this.$store.getters.pendingTasks;
     },
     finishedTasks() {
@@ -115,21 +134,26 @@ export default {
 </script>
 
 <style scoped>
+/* .custom-chevron {
+  @apply bg-zinc-900 w-10 h-10 rounded-full flex items-center justify-center hover:cursor-pointer transition-transform duration-300;
+} */
+
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.3s ease-out;
+  /* transform-origin: top; */
 }
 .slide-enter-from,
 .slide-leave-to {
   max-height: 0;
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-10px) scaleY(0.95);
 }
 .slide-enter-to,
 .slide-leave-from {
   max-height: 100vh;
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scaleY(1);
 }
 /* .task-lists-move {
   transition: transform 0.8s ease;

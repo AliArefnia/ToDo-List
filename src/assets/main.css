@@ -2,13 +2,27 @@
 @import "./base.css";
 
 body {
-  background-color: #3b3a3a;
+  /* background-color: #3b3a3a; */
   height: 100vh;
   display: flex;
 }
+
+p {
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+#backgroundSection {
+  background-image: url("https://picsum.photos/seed/picsum/1920/1080.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 #app {
   max-width: 1280px;
-  max-height: 95vh;
   font-weight: normal;
 }
 @theme {

@@ -1,5 +1,5 @@
 <template>
-  <button class="h-7 mx-3">
+  <button class="h-7 mx-2 lg:mx-3">
     <slot>
       <button
         :class="{ buttonDone: !taskIsDone, buttonNotDone: taskIsDone }"

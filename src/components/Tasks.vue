@@ -2,14 +2,13 @@
   <div
     class="flex my-4 justify-between items-center border-2 rounded-md px-4 py-2"
   >
-    <p>{{ task.description }}</p>
-    <div class="">
+    <p class="min-w-1/2 max-w-4/6 lg:max-w-5/6">{{ task.description }}</p>
+    <div id="taskButtons">
       <BaseBinbutton @click="deleteTask"></BaseBinbutton>
       <BaseTickButton
         @click="toggleTaskStatus"
         :taskIsDone="tasksIsDone"
       ></BaseTickButton>
-      <p></p>
     </div>
   </div>
 </template>
