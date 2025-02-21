@@ -11,9 +11,7 @@ const store = createStore({
 
   actions: {
     async sendTasks(context, payload) {
-      const tasks = context.getters.getTasks;
       const task = payload;
-      console.log(tasks);
 
       const responce = await fetch(
         "https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasks.json",
@@ -25,6 +23,9 @@ const store = createStore({
         const error = new Error(responceData.message || "Failed to fetch data");
         throw error;
       }
+      const id = responceData.name;
+      context.commit("addNewTask", { ...task, id });
+      console.log("Data Sent");
     },
 
     async receiveTasks(context, payload) {
@@ -43,13 +44,14 @@ const store = createStore({
       for (const key in responceData) {
         const task = {
           id: key,
+          isFinished: responceData[key].isFinished,
           description: responceData[key].description,
         };
         tasks.push(task);
       }
-
+      console.log("Data Received");
+      console.log(tasks);
       context.commit("setTasks", tasks);
-      context.dispatch("categorisingTasks", tasks);
     },
 
     async deleteTask(context, taskId) {
@@ -59,42 +61,64 @@ const store = createStore({
       );
       const responceData = await responce.json();
       if (!responce.ok) {
-        console.log("dleete failed");
+        console.log("delete failed");
       }
-      // Update local state
       context.commit("removeTask", taskId);
-      console.log("delete done");
-      // catch (error) {
-      //   console.error("Delete failed:", error);
-      // }
+      console.log("Delete done");
+    },
+
+    async toggleTaskStatus(context, { taskId, isFinished }) {
+      console.log(taskId, isFinished);
+      const responce = await fetch(
+        `https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasks/${taskId}.json`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ isFinished }),
+        }
+      );
+      const responceData = await responce.json();
+      if (!responce.ok) {
+        console.error("error happened");
+      }
+      context.commit("updateTaskStatus", { taskId, isFinished });
     },
   },
+
   mutations: {
     setTasks(state, payload) {
       state.tasks = payload;
+    },
+    addNewTask(state, task) {
+      state.tasks.unshift(task);
+      console.log(state.tasks);
     },
     removeTask(state, taskId) {
       console.log("get in mutation");
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
     },
-    setFinishedTasks(state, finishedTasks) {
-      state.finishedTasks = finishedTasks;
-    },
-    setPendingTasks(state, pendingTasks) {
-      state.pendingTasks = pendingTasks;
-    },
     updateTaskStatus(state, { taskId, isFinished }) {
-      console.log("updatetaskstatus");
-      const task = state.tasks.find((t) => t.id === taskId);
-      if (task) {
-        Object.assign(task, isFinished);
+      console.log(taskId);
+      const index = state.tasks.findIndex((t) => t.id === taskId);
+      if (index > -1) {
+        const updatedTask = {
+          ...state.tasks[index],
+          isFinished,
+        };
+        state.tasks.splice(index, 1, updatedTask);
       }
     },
   },
+
   getters: {
     getTasks(state) {
       return state.tasks;
     },
+    getFinishedTasks(state) {
+      return state.finishedTasks;
+    },
+    pendingTasks: (state) => state.tasks.filter((task) => !task.isFinished),
+    finishedTasks: (state) => state.tasks.filter((task) => task.isFinished),
   },
 });
 
