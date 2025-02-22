@@ -2,9 +2,8 @@
 @import "./base.css";
 
 body {
-  /* background-color: #3b3a3a; */
-  height: 100vh;
   display: flex;
+  height: 100vh;
 }
 
 p {
@@ -24,7 +23,6 @@ p {
 #app {
   max-width: 1280px;
   font-weight: normal;
-  max-height: 90vh;
 }
 }
 @theme {
