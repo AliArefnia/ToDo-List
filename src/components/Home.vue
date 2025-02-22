@@ -29,7 +29,7 @@
             />
           </div>
           <Transition name="slide">
-            <ul v-if="visibelPendingTasks">
+            <ul v-if="visibelPendingTasks" class="overflow-hidden">
               <li v-for="task in pendingTasks">
                 <Tasks
                   :task="task"
@@ -64,7 +64,7 @@
             ></ChevronLeft>
           </div>
           <Transition name="slide">
-            <ul v-if="visibelFinishedTasks" class="transition-all duration-300">
+            <ul v-if="visibelFinishedTasks" class="overflow-hidden">
               <li
                 v-for="task in finishedTasks"
                 class="line-through decoration-1 text-neutral-500"
@@ -115,16 +115,10 @@ export default {
   methods: {
     togglePendingVisibility() {
       this.visibelPendingTasks = !this.visibelPendingTasks;
-      console.log(this.visibelPendingTasks);
     },
     toggleFinishedVisibility() {
       this.visibelFinishedTasks = !this.visibelFinishedTasks;
-      console.log(this.visibelFinishedTasks);
     },
-    event(event) {
-      console.log(event);
-    },
-
     addTask() {
       const tempId = `temp-${Date.now()}`;
       const newTask = {
@@ -153,7 +147,6 @@ export default {
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.3s ease-out;
-  /* transform-origin: top; */
 }
 .slide-enter-from,
 .slide-leave-to {
