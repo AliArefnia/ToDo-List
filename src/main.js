@@ -7,7 +7,7 @@ import router from "./router/index.js";
 import BaseButton from "./components/ui/BaseButton.vue";
 import BaseTickbutton from "./components/ui/BaseTickbutton.vue";
 import BaseBinbutton from "./components/ui/BaseBinbutton.vue";
-import { Trash2, ChevronLeft } from "lucide-vue-next";
+import { Trash2, ChevronLeft, ArrowLeftFromLine } from "lucide-vue-next";
 
 const app = createApp(App);
 
@@ -19,5 +19,6 @@ app.component("BaseTickButton", BaseTickbutton);
 app.component("BaseBinbutton", BaseBinbutton);
 app.component("Trash2", Trash2);
 app.component("ChevronLeft", ChevronLeft);
+app.component("ArrowLeftFromLine", ArrowLeftFromLine);
 
 app.mount("#app");
