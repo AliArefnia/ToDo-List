@@ -30,6 +30,7 @@ const router = createRouter({
       path: "/taskLists/:taskListItem",
       name: "taskListItem",
       component: TaskItems,
+      props: true,
     },
     { path: "/AllTasks", name: "AllTasks", component: AllTasks },
   ],

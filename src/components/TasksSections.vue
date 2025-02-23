@@ -119,9 +119,10 @@ export default {
     addTask() {
       const crationDate = Date.now();
       const newTask = {
-        relatedList: this.list,
-        isFinished: false,
+        creationDate: crationDate,
         description: this.newTaskDescription,
+        isFinished: false,
+        list: this.list,
       };
       this.$store.dispatch("sendTasks", newTask);
       this.newTaskDescription = "";

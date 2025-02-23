@@ -1,5 +1,5 @@
 <template>
-  <TasksSections :list="list"></TasksSections>
+  <TasksSections :list="taskListItem"></TasksSections>
 </template>
 <script>
 export default {
@@ -9,7 +9,7 @@ export default {
       task: null,
     };
   },
-  props: ["list"],
+  props: ["taskListItem"],
   methods: {
     TaskListLink() {
       console.log(this.taskListName);
@@ -19,7 +19,7 @@ export default {
   created() {
     const taskListId = this.$route.params.taskListItem;
     this.task = this.taskLists.find((task) => task === taskListId);
-    this.$store.dispatch("sendTasksLists");
+    console.log(this.taskListItem);
   },
 };
 </script>
