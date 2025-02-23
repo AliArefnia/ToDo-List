@@ -8,6 +8,8 @@ import BaseButton from "./components/ui/BaseButton.vue";
 import BaseTickbutton from "./components/ui/BaseTickbutton.vue";
 import BaseBinbutton from "./components/ui/BaseBinbutton.vue";
 import { Trash2, ChevronLeft, ArrowLeftFromLine } from "lucide-vue-next";
+import Tasks from "./components/Tasks.vue";
+import TasksSections from "./components/TasksSections.vue";
 
 const app = createApp(App);
 
@@ -20,5 +22,7 @@ app.component("BaseBinbutton", BaseBinbutton);
 app.component("Trash2", Trash2);
 app.component("ChevronLeft", ChevronLeft);
 app.component("ArrowLeftFromLine", ArrowLeftFromLine);
+app.component("Tasks", Tasks);
+app.component("TasksSections", TasksSections);
 
 app.mount("#app");

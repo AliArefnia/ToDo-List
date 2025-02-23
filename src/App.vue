@@ -1,6 +1,7 @@
 <script>
 import { RouterLink, RouterView } from "vue-router";
 import navigation from "@/components/navigation.vue";
+import Tasks from "./components/Tasks.vue";
 
 export default {
   data() {
@@ -22,7 +23,7 @@ export default {
 <template>
   <div class="flex w-full flex-col">
     <header class="px-6 py-4">
-      <RouterLink v-if="notNavPage" to="navigator" class="flex w-fit">
+      <RouterLink v-if="notNavPage" to="/navigator" class="flex w-fit">
         <span class="flex items-center hover:brightness-150 w-fit">
           <ArrowLeftFromLine
             size="30"
@@ -32,13 +33,10 @@ export default {
         </span></RouterLink
       >
     </header>
-    <!-- <navigation class="w-1/3 p-6 border-r-2 hidden lg:block"></navigation> -->
-    <!-- <RouterView
-      class="flex flex-col w-full lg:w-2/3 p-6 overflow-auto"
-    ></RouterView> -->
+
+    <!-- <RouterView -->
     <RouterView class="flex flex-col w-full p-6 overflow-auto"></RouterView>
   </div>
-  <header></header>
 </template>
 
 <style scoped></style>

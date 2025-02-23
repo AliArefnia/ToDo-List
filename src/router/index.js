@@ -1,6 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/components/Home.vue";
+import Home from "@/components/TasksSections.vue";
 import Navigation from "@/components/navigation.vue";
+import TasksLists from "@/components/TasksLists.vue";
+import TaskItems from "@/components/TaskItems.vue";
+import AllTasks from "@/components/AllTasks.vue";
+import ImportantTasks from "@/components/ImportantTasks.vue";
+import TasksSections from "@/components/TasksSections.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,18 +13,25 @@ const router = createRouter({
     {
       path: "/home",
       name: "home",
-      component: Home,
+      component: TasksSections,
+    },
+    {
+      path: "/navigator",
+      name: "navigator",
+      component: Navigation,
       alias: "/",
     },
-    { path: "/navigator", name: "navigator", component: Navigation },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue'),
-    // },
+    {
+      path: "/importantTasks",
+      name: "importantTasks",
+      component: ImportantTasks,
+    },
+    {
+      path: "/taskLists/:taskListItem",
+      name: "taskListItem",
+      component: TaskItems,
+    },
+    { path: "/AllTasks", name: "AllTasks", component: AllTasks },
   ],
 });
 

@@ -90,11 +90,8 @@
 </template>
 
 <script>
-import Tasks from "./Tasks.vue";
 export default {
-  components: {
-    Tasks,
-  },
+  props: ["list"],
   computed: {
     pendingTasks() {
       console.log(this.$store.getters.pendingTasks);
@@ -120,8 +117,9 @@ export default {
       this.visibelFinishedTasks = !this.visibelFinishedTasks;
     },
     addTask() {
-      const tempId = `temp-${Date.now()}`;
+      const crationDate = Date.now();
       const newTask = {
+        relatedList: this.list,
         isFinished: false,
         description: this.newTaskDescription,
       };
