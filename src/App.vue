@@ -11,10 +11,9 @@ export default {
   },
 
   watch: {
-    // Fixed version 1: Watch specific property
     "$route.name"(newName) {
       this.notNavPage = newName !== "navigator";
-      console.log("Route name changed:", newName); // Now this will work
+      console.log("Route name changed:", newName);
     },
   },
 };

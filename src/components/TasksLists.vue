@@ -1,7 +1,7 @@
 <template>
   <div>
     <RouterLink
-      :to="`/taskLists/${tasklist}`"
+      :to="`/taskLists/${tasklist.name}`"
       v-for="tasklist in tasksLists"
       :key="tasklist.name"
       :list="tasklist.name"

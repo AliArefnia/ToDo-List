@@ -59,13 +59,15 @@ const store = createStore({
       const tasks = [];
 
       for (const key in responceData) {
-        const task = {
-          id: key,
-          list: responceData[key].list,
-          isFinished: responceData[key].isFinished,
-          description: responceData[key].description,
-        };
-        tasks.push(task);
+        if (responceData[key].list === payload) {
+          const task = {
+            id: key,
+            list: responceData[key].list,
+            isFinished: responceData[key].isFinished,
+            description: responceData[key].description,
+          };
+          tasks.push(task);
+        }
       }
       console.log(tasks);
       context.commit("setTasks", tasks);
@@ -126,6 +128,9 @@ const store = createStore({
   },
 
   mutations: {
+    clearTasks(state) {
+      state.tasks = [];
+    },
     setTasks(state, task) {
       state.tasks = task;
     },

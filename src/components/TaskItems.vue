@@ -5,8 +5,8 @@
 export default {
   data() {
     return {
-      taskLists: ["t1", "t2", "t3"],
       task: null,
+      pendingTasks: [],
     };
   },
   props: ["taskListItem"],
@@ -17,9 +17,11 @@ export default {
     },
   },
   created() {
-    const taskListId = this.$route.params.taskListItem;
-    this.task = this.taskLists.find((task) => task === taskListId);
-    console.log(this.taskListItem);
+    const taskListName = this.$route.params.taskListItem;
+    const allTasks = this.$store.getters.getTasks;
+    console.log(allTasks);
+    this.pendingTasks = allTasks.filter((task) => task.list === taskListName);
+    console.log(this.pendingTasks);
   },
 };
 </script>

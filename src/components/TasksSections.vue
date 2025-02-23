@@ -130,7 +130,7 @@ export default {
     async loadTasks() {
       this.isLoading = true;
       try {
-        await this.$store.dispatch("receiveTasks");
+        await this.$store.dispatch("receiveTasks", this.list);
       } catch (error) {}
       this.isLoading = false;
     },
@@ -138,6 +138,10 @@ export default {
 
   created() {
     this.loadTasks();
+  },
+  beforeUnmount() {
+    this.$store.commit("clearTasks");
+    console.log("taskCleared");
   },
 };
 </script>
