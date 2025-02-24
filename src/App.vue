@@ -1,7 +1,7 @@
 <script>
 import { RouterLink, RouterView } from "vue-router";
-import navigation from "@/components/navigation.vue";
-import Tasks from "./components/Tasks.vue";
+
+const body = document.querySelector("body");
 
 export default {
   data() {
@@ -15,9 +15,14 @@ export default {
     "$route.name"(newRouteName) {
       this.notNavPage = newRouteName !== "navigator";
       console.log("Route name changed:", newRouteName);
-      newRouteName === "navigator"
-        ? (this.route = "route")
-        : (this.route = "nav");
+      if (newRouteName === "navigator") {
+        this.route = "route";
+        body.classList = "bg-black lg:bg-priamry";
+        // body.classList.add("bg-black");
+      } else {
+        this.route = "nav";
+        body.classList = "bg-priamry lg:bg-black";
+      }
     },
   },
 };
