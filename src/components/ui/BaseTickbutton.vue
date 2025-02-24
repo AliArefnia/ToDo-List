@@ -1,5 +1,5 @@
 <template>
-  <button class="h-7 mx-2 lg:mx-3">
+  <button class="h-7 mx-2 lg:mx-3 cursor-pointer">
     <slot>
       <button
         :class="{ buttonDone: !taskIsDone, buttonNotDone: taskIsDone }"
@@ -57,11 +57,6 @@ export default {
 };
 </script>
 <style scoped>
-button {
-  font: inherit;
-  /* padding: 0.5rem 2rem; */
-  cursor: pointer;
-}
 .buttonDone {
   border-radius: 100%;
   width: 22px;
