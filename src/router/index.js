@@ -1,11 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/components/TasksSections.vue";
 import Navigation from "@/components/navigation.vue";
-import TasksLists from "@/components/TasksLists.vue";
 import TaskItems from "@/components/TaskItems.vue";
 import AllTasks from "@/components/AllTasks.vue";
 import ImportantTasks from "@/components/ImportantTasks.vue";
-import TasksSections from "@/components/TasksSections.vue";
+import Today from "@/Pages/Today.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,7 +11,7 @@ const router = createRouter({
     {
       path: "/today",
       name: "today",
-      component: TasksSections,
+      component: Today,
     },
     {
       path: "/navigator",

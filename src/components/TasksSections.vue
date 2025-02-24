@@ -94,7 +94,6 @@ export default {
   props: ["list"],
   computed: {
     pendingTasks() {
-      console.log(this.$store.getters.pendingTasks);
       return this.$store.getters.pendingTasks;
     },
     finishedTasks() {
@@ -122,7 +121,7 @@ export default {
         creationDate: crationDate,
         description: this.newTaskDescription,
         isFinished: false,
-        list: this.list,
+        list: this.list ?? "today",
       };
       this.$store.dispatch("sendTasks", newTask);
       this.newTaskDescription = "";

@@ -1,5 +1,5 @@
 <template>
-  <p>ALL TASKS</p>
+  <TasksSections></TasksSections>
 </template>
 <script>
 export default {};

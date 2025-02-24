@@ -47,7 +47,18 @@ export default {
     const tasks = [];
 
     for (const key in responceData) {
-      if (responceData[key].list === payload) {
+      if (payload) {
+        if (responceData[key].list === payload) {
+          const task = {
+            id: key,
+            list: responceData[key].list,
+            isFinished: responceData[key].isFinished,
+            description: responceData[key].description,
+          };
+          tasks.push(task);
+        }
+      }
+      if (!payload) {
         const task = {
           id: key,
           list: responceData[key].list,
