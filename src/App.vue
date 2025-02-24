@@ -7,13 +7,17 @@ export default {
   data() {
     return {
       notNavPage: true,
+      route: "route",
     };
   },
 
   watch: {
-    "$route.name"(newName) {
-      this.notNavPage = newName !== "navigator";
-      console.log("Route name changed:", newName);
+    "$route.name"(newRouteName) {
+      this.notNavPage = newRouteName !== "navigator";
+      console.log("Route name changed:", newRouteName);
+      newRouteName === "navigator"
+        ? (this.route = "route")
+        : (this.route = "nav");
     },
   },
 };
@@ -24,7 +28,7 @@ export default {
     class="text-white m-0 w-full flex rounded-2xl overflow-hidden"
     :class="{
       'bg-black': !this.notNavPage,
-      'bg-priamry': this.notNavPage && this.setBcakGround,
+      'bg-priamry': this.notNavPage,
     }"
   >
     <div class="flex w-full flex-col">
@@ -40,9 +44,58 @@ export default {
         >
       </header>
 
-    <!-- <RouterView -->
-    <RouterView class="flex flex-col w-full p-6 overflow-auto"></RouterView>
+      <!-- <RouterView -->
+      <RouterView
+        class="flex flex-col w-full p-6 overflow-auto"
+        v-slot="slotProps"
+      >
+        <transition :name="this.route" mode="out-in">
+          <component :is="slotProps.Component"></component>
+        </transition>
+        <!-- <transition v-if="!this.notNavPage" name="nav" mode="out-in">
+          <component :is="slotProps.Component"></component>
+        </transition> -->
+      </RouterView>
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.route-enter-active,
+.route-leave-active {
+  transition: all 0.2s ease-out;
+}
+.route-enter-from {
+  /* max-width: 0; */
+  /* opacity: 0; */
+  transform: translateX(-100%) scaleX(0.95);
+}
+.route-leave-to {
+  transform: translateX(100%) scaleX(0.95);
+}
+.route-enter-to,
+.route-leave-from {
+  /* max-width: 100%; */
+  /* opacity: 1; */
+  transform: translateX(0) scaleX(1);
+}
+
+.nav-enter-active,
+.nav-leave-active {
+  transition: all 0.2s ease-out;
+}
+.nav-enter-from {
+  /* max-width: 0; */
+  /* opacity: 0; */
+  transform: translateX(100%) scaleX(0.95);
+}
+.nav-leave-to {
+  transform: translateX(-100%) scaleX(0.95);
+}
+.nav-enter-to,
+.nav-leave-from {
+  /* max-width: 100%; */
+  /* opacity: 1; */
+  transform: translateX(0) scaleX(1);
+}
+</style>
