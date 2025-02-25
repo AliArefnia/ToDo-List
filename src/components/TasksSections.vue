@@ -23,8 +23,20 @@
         </p>
       </transition>
     </div>
-    <article class="overflow-auto transition-all duration-500 mt-4">
+    <article
+      class="transition-all duration-500 mt-4"
+      :class="{
+        'overflow-auto': !this.isLoading,
+        'overflow-hidden': this.isLoading,
+      }"
+    >
+      <p class="text-gray-400" v-if="this.errorMessage">
+        {{ this.errorMessage }}
+      </p>
+      <p class="text-gray-400" v-if="this.isLoading">Loading Your Tasks...</p>
+      <BaseSpinner v-if="this.isLoading"></BaseSpinner>
       <section
+        v-if="!this.errorMessage && !this.isLoading"
         class="content-wrapper pt-0 lg:px-[16px] lg:box-content lg:pr-[calc(16px + 1rem)] pr-4"
       >
         <section id="pendingTasks">
@@ -114,6 +126,7 @@ export default {
   },
   data() {
     return {
+      errorMessage: null,
       newTaskDescription: "",
       isLoading: false,
       notValidInput: false,
@@ -156,7 +169,9 @@ export default {
       this.isLoading = true;
       try {
         await this.$store.dispatch("receiveTasks", this.list || null);
-      } catch (error) {}
+      } catch (error) {
+        this.errorMessage = "Can't get Your Tasks, Pleas try again using VPN!";
+      }
       this.isLoading = false;
     },
   },

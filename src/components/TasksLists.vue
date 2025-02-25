@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col overflow-auto h-full">
+  <div class="flex flex-col overflow-hidden h-full">
     <!-- <section class="flex flex-col overflow-auto basis-3/4"> -->
     <section class="flex flex-col overflow-auto basis-3/4 lg:w-5/6 lg:mx-auto">
       <p
