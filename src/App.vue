@@ -18,7 +18,6 @@ export default {
       if (newRouteName === "navigator") {
         this.route = "route";
         body.classList = "bg-black lg:bg-priamry";
-        // body.classList.add("bg-black");
       } else {
         this.route = "nav";
         body.classList = "bg-priamry lg:bg-black";
@@ -57,9 +56,6 @@ export default {
         <transition :name="this.route" mode="out-in">
           <component :is="slotProps.Component"></component>
         </transition>
-        <!-- <transition v-if="!this.notNavPage" name="nav" mode="out-in">
-          <component :is="slotProps.Component"></component>
-        </transition> -->
       </RouterView>
     </div>
   </div>
@@ -71,8 +67,6 @@ export default {
   transition: all 0.2s ease-out;
 }
 .route-enter-from {
-  /* max-width: 0; */
-  /* opacity: 0; */
   transform: translateX(-100%) scaleX(0.95);
 }
 .route-leave-to {
@@ -80,8 +74,6 @@ export default {
 }
 .route-enter-to,
 .route-leave-from {
-  /* max-width: 100%; */
-  /* opacity: 1; */
   transform: translateX(0) scaleX(1);
 }
 
@@ -90,8 +82,6 @@ export default {
   transition: all 0.2s ease-out;
 }
 .nav-enter-from {
-  /* max-width: 0; */
-  /* opacity: 0; */
   transform: translateX(100%) scaleX(0.95);
 }
 .nav-leave-to {
@@ -99,8 +89,6 @@ export default {
 }
 .nav-enter-to,
 .nav-leave-from {
-  /* max-width: 100%; */
-  /* opacity: 1; */
   transform: translateX(0) scaleX(1);
 }
 </style>

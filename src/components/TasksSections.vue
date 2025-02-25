@@ -4,7 +4,7 @@
       <input
         type="text"
         id="task"
-        class="w-full lg:w-5/6 px-3 bg-zinc-700 border-b-neutral-500 rounded-md h-[3rem]"
+        class="w-full lg:w-5/6 px-3 bg-zinc-700 border-b-neutral-500 rounded-md h-[3rem] outline-amber-50"
         placeholder="Enter Your Task ..."
         v-model="newTaskDescription"
         @keypress.enter="addTask"
@@ -129,7 +129,7 @@ export default {
     async loadTasks() {
       this.isLoading = true;
       try {
-        await this.$store.dispatch("receiveTasks", this.list);
+        await this.$store.dispatch("receiveTasks", this.list || null);
       } catch (error) {}
       this.isLoading = false;
     },

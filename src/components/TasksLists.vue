@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col overflow-auto h-full">
     <!-- <section class="flex flex-col overflow-auto basis-3/4"> -->
-    <section class="flex flex-col overflow-auto basis-3/4">
+    <section class="flex flex-col overflow-auto basis-3/4 lg:w-5/6 lg:mx-auto">
       <p
         class="text-gray-400"
         v-if="!this.isLoading && tasksLists.length === 0 && !this.errorMessage"
@@ -23,11 +23,11 @@
       >
     </section>
     <!-- <section class="overflow-hidden mt-2 basis-1/4"> -->
-    <section class="overflow-hidden mt-2 flex-auto">
+    <section class="mt-4 flex-auto">
       <input
         type="text"
         id="taskList"
-        class="w-full lg:w-5/6 px-3 bg-zinc-700 rounded-md h-[40px] outline-none"
+        class="w-full lg:w-5/6 px-3 bg-zinc-700 rounded-md h-[40px] outline-amber-50"
         placeholder="Enter Your List name here ..."
         v-model="newListName"
         @keypress.enter="addList"
