@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Navigation from "@/components/navigation.vue";
+import Navigation from "@/Pages/navigation.vue";
 import TaskItems from "@/components/TaskItems.vue";
-import AllTasks from "@/components/AllTasks.vue";
-import ImportantTasks from "@/components/ImportantTasks.vue";
+import AllTasks from "@/Pages/AllTasks.vue";
+import ImportantTasks from "@/Pages/ImportantTasks.vue";
 import Today from "@/Pages/Today.vue";
 
 const router = createRouter({

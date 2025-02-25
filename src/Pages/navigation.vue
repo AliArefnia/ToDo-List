@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import TasksLists from "./TasksLists.vue";
+import TasksLists from "@/components/TasksLists.vue";
 import { Sun, Star, Infinity } from "lucide-vue-next";
 export default {
   components: { TasksLists, Sun, Star, Infinity },
