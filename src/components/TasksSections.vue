@@ -1,19 +1,29 @@
 <template>
   <div class="overflow-hidden">
-    <section class="flex w-full mb-6">
-      <input
-        type="text"
-        id="task"
-        class="w-full lg:w-5/6 px-3 bg-zinc-700 border-b-neutral-500 rounded-md h-[3rem] outline-amber-50"
-        placeholder="Enter Your Task ..."
-        v-model="newTaskDescription"
-        @keypress.enter="addTask"
-      />
-      <BaseButton class="w-1/6 hidden lg:inline-block" @click="addTask"
-        >Enter</BaseButton
-      >
-    </section>
-    <article class="overflow-auto">
+    <div>
+      <section class="flex w-full mb-2">
+        <input
+          type="text"
+          id="task"
+          class="w-full lg:w-5/6 px-3 bg-zinc-700 border-b-neutral-500 rounded-md h-[3rem] outline-amber-50"
+          placeholder="Enter Your Task ..."
+          v-model="newTaskDescription"
+          @keypress.enter="addTask()"
+          @focus="inputFocused"
+          ref="inputRef"
+          @keyup.enter="unfocus"
+        />
+        <BaseButton class="w-1/6 hidden lg:inline-block" @click="addTask"
+          >Enter</BaseButton
+        >
+      </section>
+      <transition name="validation">
+        <p v-if="notValidInput" class="flex text-red-700 pl-3 mb-4">
+          Task can't be empty or too long!
+        </p>
+      </transition>
+    </div>
+    <article class="overflow-auto transition-all duration-500 mt-4">
       <section
         class="content-wrapper pt-0 lg:px-[16px] lg:box-content lg:pr-[calc(16px + 1rem)] pr-4"
       >
@@ -90,6 +100,8 @@
 </template>
 
 <script>
+import validInput from "@/helpers/Validation.js";
+
 export default {
   props: ["list"],
   computed: {
@@ -102,8 +114,9 @@ export default {
   },
   data() {
     return {
-      newTaskDescription: null,
+      newTaskDescription: "",
       isLoading: false,
+      notValidInput: false,
       visibelPendingTasks: true,
       visibelFinishedTasks: true,
     };
@@ -115,7 +128,12 @@ export default {
     toggleFinishedVisibility() {
       this.visibelFinishedTasks = !this.visibelFinishedTasks;
     },
-    addTask() {
+    addTask(event) {
+      console.log(event);
+      if (!validInput(this.newTaskDescription)) {
+        this.notValidInput = true;
+        return;
+      }
       const crationDate = Date.now();
       const newTask = {
         creationDate: crationDate,
@@ -125,7 +143,15 @@ export default {
       };
       this.$store.dispatch("sendTasks", newTask);
       this.newTaskDescription = "";
+      event.target.blur();
     },
+    unfocus() {
+      this.$refs.inputRef.blur();
+    },
+    inputFocused() {
+      this.notValidInput = false;
+    },
+
     async loadTasks() {
       this.isLoading = true;
       try {
@@ -161,5 +187,20 @@ export default {
   max-height: 100vh;
   opacity: 1;
   transform: translateY(0) scaleY(1);
+}
+
+.validation-enter-active,
+.validation-leave-active {
+  transition: all 0.3s ease-out;
+}
+.validation-enter-from,
+.validation-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+.validation-enter-to,
+.validation-leave-from {
+  max-height: 100px;
+  opacity: 1;
 }
 </style>
