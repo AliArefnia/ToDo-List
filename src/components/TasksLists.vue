@@ -59,6 +59,12 @@
         >
           Task can't be empty or too long!
         </p>
+        <p
+          v-else-if="repetitiveListName"
+          class="flex text-red-700 pl-3 lg:ml-[6rem] mt-2 lg:w-5/6"
+        >
+          This List name already exists!
+        </p>
       </transition>
     </section>
   </div>
@@ -74,6 +80,7 @@ export default {
   data() {
     return {
       notValidInput: false,
+      repetitiveListName: false,
       errorMessage: null,
       isLoading: false,
       newListName: "",
@@ -102,6 +109,11 @@ export default {
         this.notValidInput = true;
         return;
       }
+      if (this.tasksListsLocal.find((list) => list.name === this.newListName)) {
+        this.repetitiveListName = true;
+        return;
+      }
+
       this.$store.dispatch("sendTasksLists", {
         name: this.newListName,
         id: Date.now(),
@@ -110,6 +122,7 @@ export default {
     },
     inputFocused() {
       this.notValidInput = false;
+      this.repetitiveListName = false;
     },
     unfocus() {
       this.$refs.inputRef.blur();
