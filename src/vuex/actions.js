@@ -87,6 +87,7 @@ export default {
 
     for (const key in responceData) {
       const tasksList = {
+        id: key,
         name: responceData[key].name,
       };
       tasksLists.push(tasksList);

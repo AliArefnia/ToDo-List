@@ -102,7 +102,10 @@ export default {
         this.notValidInput = true;
         return;
       }
-      this.$store.dispatch("sendTasksLists", { name: this.newListName });
+      this.$store.dispatch("sendTasksLists", {
+        name: this.newListName,
+        id: Date.now(),
+      });
       this.newListName = "";
     },
     inputFocused() {
