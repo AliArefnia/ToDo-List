@@ -20,6 +20,11 @@ export default {
   removeTask(state, taskId) {
     state.tasks = state.tasks.filter((task) => task.id !== taskId);
   },
+  removeTaskList(state, taskListId) {
+    state.taskLists = state.taskLists.filter(
+      (taskList) => taskList.id !== taskListId
+    );
+  },
   updateTaskStatus(state, { taskId, isFinished }) {
     const index = state.tasks.findIndex((t) => t.id === taskId);
     if (index > -1) {

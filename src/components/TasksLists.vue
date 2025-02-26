@@ -28,14 +28,17 @@
         <ChevronLeft
           class="bg-neutral-900 w-5 h-5 rounded-full flex items-center justify-center hover:cursor-pointer transition-transform duration-300"
           :class="{ '-rotate-90': tasklist.listPanelVisible }"
-          @click="switchPanelVisiblity(tasklist.name)"
+          @click="switchPanelVisiblity(tasklist.id)"
         />
         <transition name="listSlide"
           ><div
             v-if="tasklist.listPanelVisible"
             class="flex w-full bg-neutral-900 justify-center"
           >
-            <BaseBinbutton class="my-1"></BaseBinbutton></div
+            <BaseBinbutton
+              class="my-1"
+              @click="deleteTaskList(tasklist.id)"
+            ></BaseBinbutton></div
         ></transition>
       </section>
     </section>
@@ -90,21 +93,44 @@ export default {
 
   computed: {
     tasksLists() {
-      return this.$store.getters.getTasksLists;
+      return this.$store.getters.getTasksLists.map((list) => ({
+        ...list,
+        listPanelVisible: false,
+      }));
     },
   },
+
   methods: {
-    receiveTasksLists() {
-      this.tasksListsLocal = this.$store.getters.getTasksLists;
-      this.tasksListsLocal.map((list) => (list.listPanelVisible = false));
-    },
-    switchPanelVisiblity(tasklistName) {
-      const swapedList = this.tasksListsLocal.find(
-        (taskList) => taskList.name === tasklistName
+    deleteTaskList(taskListId) {
+      try {
+        this.$store.dispatch("deleteTaskList", taskListId);
+      } catch (error) {
+        console.error("Delete failed:", error);
+      }
+      const deletedListIndex = this.tasksListsLocal.findIndex(
+        (list) => list.id === taskListId
       );
-      swapedList.listPanelVisible = !swapedList.listPanelVisible;
+      this.tasksListsLocal.splice(deletedListIndex, 1);
     },
-    addList() {
+
+    receiveTasksLists() {
+      console.log(this.tasksListsLocal);
+      this.tasksListsLocal = this.$store.getters.getTasksLists;
+      this.tasksListsLocal.map(
+        (list) => (list.listPanelVisible = list.listPanelVisible || false)
+      );
+    },
+
+    switchPanelVisiblity(tasklistId) {
+      this.tasksListsLocal.map((tasklist) => {
+        if (tasklist.id === tasklistId) {
+          tasklist.listPanelVisible = !tasklist.listPanelVisible;
+        }
+      });
+      console.log(this.tasksListsLocal);
+    },
+
+    async addList() {
       if (!validInput(this.newListName)) {
         this.notValidInput = true;
         return;
@@ -114,10 +140,13 @@ export default {
         return;
       }
 
-      this.$store.dispatch("sendTasksLists", {
+      await this.$store.dispatch("sendTasksLists", {
         name: this.newListName,
         id: Date.now(),
       });
+      console.log(this.tasksLists);
+      console.log(this.tasksListsLocal);
+
       this.newListName = "";
     },
     inputFocused() {

@@ -109,6 +109,19 @@ export default {
     console.log("Delete done");
   },
 
+  async deleteTaskList(context, taskListId) {
+    const responce = await fetch(
+      `https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasksLists/${taskListId}.json`,
+      { method: "DELETE" }
+    );
+    const responceData = await responce.json();
+    if (!responce.ok) {
+      console.log("delete failed");
+    }
+    context.commit("removeTaskList", taskListId);
+    console.log("Delete done");
+  },
+
   async toggleTaskStatus(context, { taskId, isFinished }) {
     console.log(taskId, isFinished);
     const responce = await fetch(
