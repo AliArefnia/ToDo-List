@@ -13,14 +13,31 @@
       </p>
       <p class="text-gray-400" v-if="this.isLoading">Loading Your lists...</p>
       <BaseSpinner v-if="this.isLoading"></BaseSpinner>
-      <BaseRouterLinkList
+      <section
+        class="flex justify-between items-center w-[95%] border-b-1 border-b-neutral-800 flex-wrap"
+        v-for="tasklist in tasksListsLocal"
         v-if="!this.isLoading"
-        :to="`/taskLists/${tasklist.name}`"
-        v-for="tasklist in tasksLists"
-        :key="tasklist.name"
-        :list="tasklist.name"
-        >{{ tasklist.name }}</BaseRouterLinkList
       >
+        <BaseRouterLinkList
+          :to="`/taskLists/${tasklist.name}`"
+          :key="tasklist.name"
+          :list="tasklist.name"
+        >
+          <p>{{ tasklist.name }}</p>
+        </BaseRouterLinkList>
+        <ChevronLeft
+          class="bg-neutral-900 w-5 h-5 rounded-full flex items-center justify-center hover:cursor-pointer transition-transform duration-300"
+          :class="{ '-rotate-90': tasklist.listPanelVisible }"
+          @click="switchPanelVisiblity(tasklist.name)"
+        />
+        <transition name="listSlide"
+          ><div
+            v-if="tasklist.listPanelVisible"
+            class="flex w-full bg-neutral-900 justify-center"
+          >
+            <BaseBinbutton class="my-1"></BaseBinbutton></div
+        ></transition>
+      </section>
     </section>
     <!-- <section class="overflow-hidden mt-2 basis-1/4"> -->
     <section class="mt-4 flex-auto transition-all">
@@ -60,14 +77,26 @@ export default {
       errorMessage: null,
       isLoading: false,
       newListName: "",
+      tasksListsLocal: [],
     };
   },
+
   computed: {
     tasksLists() {
       return this.$store.getters.getTasksLists;
     },
   },
   methods: {
+    receiveTasksLists() {
+      this.tasksListsLocal = this.$store.getters.getTasksLists;
+      this.tasksListsLocal.map((list) => (list.listPanelVisible = false));
+    },
+    switchPanelVisiblity(tasklistName) {
+      const swapedList = this.tasksListsLocal.find(
+        (taskList) => taskList.name === tasklistName
+      );
+      swapedList.listPanelVisible = !swapedList.listPanelVisible;
+    },
     addList() {
       if (!validInput(this.newListName)) {
         this.notValidInput = true;
@@ -89,12 +118,14 @@ export default {
       } catch (error) {
         this.errorMessage = "Can't get Your lists, pleas try again using VPN!";
       }
+      this.receiveTasksLists();
       this.isLoading = false;
     },
   },
   created() {
     this.loadTasksLists();
   },
+  mounted() {},
 };
 </script>
 <style>
@@ -109,6 +140,21 @@ export default {
 }
 .validation-enter-to,
 .validation-leave-from {
+  max-height: 100px;
+  opacity: 1;
+}
+
+.listSlide-enter-active,
+.listSlide-leave-active {
+  transition: all 0.3s ease-out;
+}
+.listSlide-enter-from,
+.listSlide-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+.listSlide-enter-to,
+.listSlide-leave-from {
   max-height: 100px;
   opacity: 1;
 }
