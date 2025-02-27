@@ -23,23 +23,33 @@
         </p>
       </transition>
     </div>
-    <article
+
+    <TransitionGroup
+      tag="article"
+      name="mainContent"
       class="transition-all duration-500 mt-4"
       :class="{
         'overflow-auto': !this.isLoading,
         'overflow-hidden': this.isLoading,
       }"
     >
-      <p class="text-gray-400" v-if="this.errorMessage">
-        {{ this.errorMessage }}
-      </p>
-      <p class="text-gray-400" v-if="this.isLoading">Loading Your Tasks...</p>
-      <BaseSpinner v-if="this.isLoading"></BaseSpinner>
+      <div
+        id="loadingContainer"
+        v-if="this.errorMessage || this.isLoading"
+        class="text-center"
+        key="loadingContainer"
+      >
+        <p class="text-gray-400" v-if="this.errorMessage">
+          {{ this.errorMessage }}
+        </p>
+        <p class="text-gray-400" v-if="this.isLoading">Loading Your Tasks...</p>
+        <BaseSpinner v-if="this.isLoading"></BaseSpinner>
+      </div>
       <section
         v-if="!this.errorMessage && !this.isLoading"
         class="content-wrapper pt-0 lg:px-[16px] lg:box-content lg:pr-[calc(16px + 1rem)] pr-4"
       >
-        <section id="pendingTasks">
+        <section id="pendingTasks" key="pendingTasks">
           <div
             class="flex justify-between cursor-pointer"
             @click="togglePendingVisibility()"
@@ -51,14 +61,16 @@
             />
           </div>
           <Transition name="slide">
-            <ul v-if="visibelPendingTasks" class="overflow-hidden">
-              <li v-for="task in pendingTasks">
-                <Tasks
-                  :task="task"
-                  :key="task.id"
-                  class="border-zinc-500"
-                ></Tasks>
-              </li>
+            <div v-if="visibelPendingTasks" class="overflow-hidden">
+              <TransitionGroup tag="ul" name="task">
+                <li v-for="task in pendingTasks" :key="task.id">
+                  <Tasks
+                    :task="task"
+                    :key="task.id"
+                    class="border-zinc-500"
+                  ></Tasks>
+                </li>
+              </TransitionGroup>
               <p
                 v-if="pendingTasks.length === 0 && finishedTasks.length !== 0"
                 class="text-neutral-600 text-center"
@@ -71,10 +83,14 @@
               >
                 You Havn't added any Task
               </p>
-            </ul>
+            </div>
           </Transition>
         </section>
-        <section id="FinishedTasks">
+        <section
+          id="FinishedTasks"
+          key="FinishedTasks"
+          class="transition-all duration-500 ease-in"
+        >
           <div
             class="flex mt-6 justify-between cursor-pointer"
             @click="toggleFinishedVisibility()"
@@ -86,28 +102,31 @@
             ></ChevronLeft>
           </div>
           <Transition name="slide">
-            <ul v-if="visibelFinishedTasks" class="overflow-hidden">
-              <li
-                v-for="task in finishedTasks"
-                class="line-through decoration-1 text-neutral-500"
-              >
-                <Tasks
-                  :task="task"
+            <div v-if="visibelFinishedTasks" class="overflow-hidden">
+              <TransitionGroup tag="ul" name="task">
+                <li
+                  v-for="task in finishedTasks"
                   :key="task.id"
-                  class="border-green-900"
-                ></Tasks>
-              </li>
+                  class="line-through decoration-1 text-neutral-500"
+                >
+                  <Tasks
+                    :task="task"
+                    :key="task.id"
+                    class="border-green-900"
+                  ></Tasks>
+                </li>
+              </TransitionGroup>
               <p
                 v-if="finishedTasks.length === 0"
                 class="text-neutral-600 text-center"
               >
                 You Havn't any Finished Task Yet
               </p>
-            </ul>
+            </div>
           </Transition>
         </section>
       </section>
-    </article>
+    </TransitionGroup>
   </div>
 </template>
 
@@ -217,5 +236,42 @@ export default {
 .validation-leave-from {
   max-height: 100px;
   opacity: 1;
+}
+
+.task-enter-active {
+  transition: all 0.5s ease-out;
+}
+.task-leave-active {
+  transition: all 0.3s ease-in;
+  position: absolute;
+}
+.task-enter-from {
+  transform: translateX(-30px);
+  max-height: 0;
+  opacity: 0;
+}
+.task-leave-to {
+  transform: translateX(30px);
+  max-height: 0;
+  opacity: 0;
+}
+.task-enter-to,
+.task-leave-from {
+  transform: translateX(0);
+  max-height: 100px;
+  opacity: 1;
+}
+.task-move {
+  transition: transform 0.8s ease;
+}
+
+.mainContent-enter-from {
+  opacity: 0;
+}
+.mainContent-enter-to {
+  opacity: 1;
+}
+.mainContent-enter-active {
+  transition: all 0.5s ease-out;
 }
 </style>
