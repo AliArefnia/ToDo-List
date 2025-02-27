@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Navigation from "@/Pages/navigation.vue";
 import TaskItems from "@/components/TaskItems.vue";
-import AllTasks from "@/Pages/AllTasks.vue";
-import ImportantTasks from "@/Pages/ImportantTasks.vue";
 import Today from "@/Pages/Today.vue";
 
 const router = createRouter({
@@ -22,7 +20,7 @@ const router = createRouter({
     {
       path: "/importantTasks",
       name: "importantTasks",
-      component: ImportantTasks,
+      component: () => import("@/Pages/ImportantTasks.vue"),
     },
     {
       path: "/taskLists/:taskListItem",
@@ -30,7 +28,11 @@ const router = createRouter({
       component: TaskItems,
       props: true,
     },
-    { path: "/AllTasks", name: "AllTasks", component: AllTasks },
+    {
+      path: "/AllTasks",
+      name: "AllTasks",
+      component: () => import("@/Pages/AllTasks.vue"),
+    },
   ],
 });
 
