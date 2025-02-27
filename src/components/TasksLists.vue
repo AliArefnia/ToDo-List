@@ -1,18 +1,26 @@
 <template>
   <div class="flex flex-col overflow-hidden h-full">
     <!-- <section class="flex flex-col overflow-auto basis-3/4"> -->
-    <section class="flex flex-col overflow-auto basis-3/4 lg:w-5/6 lg:mx-auto">
-      <p
-        class="text-gray-400"
-        v-if="!this.isLoading && tasksLists.length === 0 && !this.errorMessage"
-      >
-        You can add list here...
-      </p>
-      <p class="text-gray-400" v-if="this.errorMessage">
-        {{ this.errorMessage }}
-      </p>
-      <p class="text-gray-400" v-if="this.isLoading">Loading Your lists...</p>
-      <BaseSpinner v-if="this.isLoading"></BaseSpinner>
+    <TransitionGroup
+      tag="section"
+      name="taskList"
+      class="flex flex-col overflow-auto basis-3/4 lg:w-5/6 lg:mx-auto"
+    >
+      <div id="loadingContainer" key="loadingContainer">
+        <p
+          class="text-gray-400"
+          v-if="
+            !this.isLoading && tasksLists.length === 0 && !this.errorMessage
+          "
+        >
+          You can add list here...
+        </p>
+        <p class="text-gray-400" v-if="this.errorMessage">
+          {{ this.errorMessage }}
+        </p>
+        <p class="text-gray-400" v-if="this.isLoading">Loading Your lists...</p>
+        <BaseSpinner v-if="this.isLoading"></BaseSpinner>
+      </div>
       <section
         class="flex justify-between items-center w-[95%] border-b-1 border-b-neutral-800 flex-wrap"
         v-for="tasklist in tasksListsLocal"
@@ -41,7 +49,7 @@
             ></BaseBinbutton></div
         ></transition>
       </section>
-    </section>
+    </TransitionGroup>
     <!-- <section class="overflow-hidden mt-2 basis-1/4"> -->
     <section class="mt-4 flex-auto transition-all">
       <input
@@ -174,7 +182,7 @@ export default {
   mounted() {},
 };
 </script>
-<style>
+<style scoped>
 .validation-enter-active,
 .validation-leave-active {
   transition: all 0.3s ease-out;
@@ -203,5 +211,18 @@ export default {
 .listSlide-leave-from {
   max-height: 100px;
   opacity: 1;
+}
+
+.taskList-enter-from,
+.taskList-leave-to {
+  opacity: 0;
+}
+.taskList-enter-to,
+.taskList-leave-from {
+  opacity: 1;
+}
+.taskList-enter-active,
+.taskList-leave-active {
+  transition: opacity 0.5s ease-out;
 }
 </style>
