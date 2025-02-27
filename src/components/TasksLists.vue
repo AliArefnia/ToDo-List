@@ -53,7 +53,7 @@
         @keypress.enter="addList"
         @focus="inputFocused"
         ref="inputRef"
-        @keyup.enter="unfocus"
+        @input="clearNotValidInput"
       />
       <transition name="validation">
         <p
@@ -153,8 +153,9 @@ export default {
       this.notValidInput = false;
       this.repetitiveListName = false;
     },
-    unfocus() {
-      this.$refs.inputRef.blur();
+    clearNotValidInput() {
+      this.notValidInput = false;
+      this.repetitiveListName = false;
     },
     async loadTasksLists() {
       this.isLoading = true;

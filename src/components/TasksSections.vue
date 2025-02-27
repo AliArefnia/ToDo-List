@@ -11,7 +11,7 @@
           @keypress.enter="addTask()"
           @focus="inputFocused"
           ref="inputRef"
-          @keyup.enter="unfocus"
+          @input="clearNotValidInput"
         />
         <BaseButton class="w-1/6 hidden lg:inline-block" @click="addTask"
           >Enter</BaseButton
@@ -158,8 +158,8 @@ export default {
       this.newTaskDescription = "";
       event.target.blur();
     },
-    unfocus() {
-      this.$refs.inputRef.blur();
+    clearNotValidInput() {
+      this.notValidInput = false;
     },
     inputFocused() {
       this.notValidInput = false;
