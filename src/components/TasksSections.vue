@@ -175,7 +175,7 @@ export default {
         creationDate: crationDate,
         description: this.newTaskDescription,
         isFinished: false,
-        list: this.list ?? "today",
+        list: this.list === "All Tasks" ? "today" : this.list,
       };
       this.$store.dispatch("sendTasks", newTask);
       this.newTaskDescription = "";
@@ -190,7 +190,7 @@ export default {
     async loadTasks() {
       this.isLoading = true;
       try {
-        await this.$store.dispatch("receiveTasks", this.list || null);
+        await this.$store.dispatch("receiveTasks", this.list);
       } catch (error) {
         this.errorMessage = "Can't get Your Tasks, Pleas try again using VPN!";
       }

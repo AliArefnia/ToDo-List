@@ -47,7 +47,7 @@ export default {
     const tasks = [];
 
     for (const key in responceData) {
-      if (payload) {
+      if (payload !== "All Tasks") {
         if (responceData[key].list === payload) {
           const task = {
             id: key,
@@ -58,7 +58,7 @@ export default {
           tasks.push(task);
         }
       }
-      if (!payload) {
+      if (payload === "All Tasks") {
         const task = {
           id: key,
           list: responceData[key].list,
