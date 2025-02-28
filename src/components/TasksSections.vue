@@ -1,6 +1,11 @@
 <template>
   <div class="overflow-hidden">
     <div>
+      <h2
+        class="text-3xl mb-2 font-mono italic uppercase text-rose-500 px-3 bg-zinc-600 rounded-xl inline-block"
+      >
+        {{ list }}
+      </h2>
       <section class="flex w-full mb-2">
         <input
           type="text"
@@ -54,7 +59,7 @@
             class="flex justify-between cursor-pointer"
             @click="togglePendingVisibility()"
           >
-            <p class="text-lg">Pending Tasks</p>
+            <p class="text-md">Pending Tasks</p>
             <ChevronLeft
               class="bg-neutral-900 w-10 h-10 rounded-full flex items-center justify-center hover:cursor-pointer transition-transform duration-300"
               :class="{ '-rotate-90': visibelPendingTasks }"
@@ -95,7 +100,7 @@
             class="flex mt-6 justify-between cursor-pointer"
             @click="toggleFinishedVisibility()"
           >
-            <p class="text-lg">Finished Tasks</p>
+            <p class="text-md">Finished Tasks</p>
             <ChevronLeft
               class="bg-neutral-900 w-10 h-10 rounded-full flex items-center justify-center hover:cursor-pointer transition-transform duration-300"
               :class="{ '-rotate-90': visibelFinishedTasks }"
@@ -160,8 +165,7 @@ export default {
     toggleFinishedVisibility() {
       this.visibelFinishedTasks = !this.visibelFinishedTasks;
     },
-    addTask(event) {
-      console.log(event);
+    addTask() {
       if (!validInput(this.newTaskDescription)) {
         this.notValidInput = true;
         return;
@@ -175,7 +179,6 @@ export default {
       };
       this.$store.dispatch("sendTasks", newTask);
       this.newTaskDescription = "";
-      event.target.blur();
     },
     clearNotValidInput() {
       this.notValidInput = false;

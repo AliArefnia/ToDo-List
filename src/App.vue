@@ -50,7 +50,7 @@ export default {
 
       <!-- <RouterView -->
       <RouterView
-        class="flex flex-col w-full p-6 overflow-auto"
+        class="flex flex-col w-full p-6 pt-0 overflow-auto"
         v-slot="slotProps"
       >
         <transition :name="this.route" mode="out-in">
