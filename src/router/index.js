@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Navigation from "@/Pages/navigation.vue";
 import TaskItems from "@/components/TaskItems.vue";
 import Today from "@/Pages/Today.vue";
+import Login from "@/Pages/Login.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: "/AllTasks",
       name: "AllTasks",
       component: () => import("@/Pages/AllTasks.vue"),
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: Login,
     },
   ],
 });
