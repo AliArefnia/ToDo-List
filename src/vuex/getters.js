@@ -10,4 +10,7 @@ export default {
   },
   pendingTasks: (state) => state.tasks.filter((task) => !task.isFinished),
   finishedTasks: (state) => state.tasks.filter((task) => task.isFinished),
+  isAuthenticated(state) {
+    return !!state.token;
+  },
 };
