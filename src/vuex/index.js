@@ -10,6 +10,9 @@ const store = createStore({
       finishedTasks: [],
       pendingTasks: [],
       taskLists: [],
+      userId: null,
+      token: null,
+      tokenExpiration: null,
     };
   },
 

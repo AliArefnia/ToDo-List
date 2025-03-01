@@ -1,3 +1,5 @@
+const API_KEY = "AIzaSyAfvqTdgLhk7_mKxAp2X4iKef1KxKV1I18";
+
 export default {
   async sendTasks(context, payload) {
     const task = payload;
@@ -137,5 +139,37 @@ export default {
       console.error("error happened");
     }
     context.commit("updateTaskStatus", { taskId, isFinished });
+  },
+
+  async signUp(context, payload) {
+    try {
+      const response = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            email: payload.email,
+            password: payload.password,
+            returnSecureToken: true,
+          }),
+        }
+      );
+      const responseData = await response.json();
+
+      if (!response) {
+        console.log(responseData);
+        const error =
+          new Error(responseData.message) || "Failed to authenticate!";
+        throw error;
+      }
+
+      console.log(responseData);
+
+      context.commit("setUser", {
+        token: responseData.token,
+        userId: responseData.localId,
+        tokenExpiration: responseData.expiresIn,
+      });
+    } catch {}
   },
 };

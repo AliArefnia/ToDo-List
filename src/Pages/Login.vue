@@ -50,6 +50,7 @@
             type="email"
             name="email"
             placeholder="Email Address"
+            v-model="email"
           />
 
           <!-- <label class="" for="password">Password:</label> -->
@@ -58,6 +59,7 @@
             type="password"
             name="password"
             placeholder="Password"
+            v-model="password"
           />
           <Transition name="newFieldComming">
             <input
@@ -66,6 +68,7 @@
               type="password"
               name="password"
               placeholder="Repeat Password"
+              v-model="passwordRepeat"
             />
           </Transition>
         </div>
@@ -73,6 +76,7 @@
           <BaseButton
             class="submitButton w-full text-2xl opacity-100 h-[4rem] transition-transform"
             :key="formSubmitButton"
+            @click="submitData"
             >{{ formSubmitButton }}</BaseButton
           >
         </transition>
@@ -88,6 +92,10 @@ export default {
     return {
       signupIsSelected: false,
       loginIsSelected: true,
+      email: "",
+      password: "",
+      passwordRepeat: "",
+      formIsValid: true,
     };
   },
 
@@ -108,6 +116,13 @@ export default {
       this.signupIsSelected = !this.signupIsSelected;
       console.log(this.loginIsSelected);
       console.log(this.signupIsSelected);
+    },
+    submitData() {
+      const userInputs = {
+        email: this.email,
+        password: this.password,
+      };
+      this.$store.dispatch("signUp", userInputs);
     },
   },
 };
