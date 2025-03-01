@@ -18,7 +18,7 @@
           ref="inputRef"
           @input="clearNotValidInput"
         />
-        <BaseButton class="w-1/6 hidden lg:inline-block" @click="addTask"
+        <BaseButton class="w-1/6 hidden lg:inline-block ml-4" @click="addTask"
           >Enter</BaseButton
         >
       </section>
