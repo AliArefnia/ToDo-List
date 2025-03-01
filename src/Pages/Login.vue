@@ -96,6 +96,7 @@ export default {
       password: "",
       passwordRepeat: "",
       formIsValid: true,
+      isLoading: false,
     };
   },
 
@@ -114,15 +115,26 @@ export default {
     switchLogInSignUp() {
       this.loginIsSelected = !this.loginIsSelected;
       this.signupIsSelected = !this.signupIsSelected;
-      console.log(this.loginIsSelected);
-      console.log(this.signupIsSelected);
     },
-    submitData() {
+    async submitData() {
       const userInputs = {
         email: this.email,
         password: this.password,
       };
-      this.$store.dispatch("signUp", userInputs);
+      this.isLoading = true;
+      try {
+        if (this.loginIsSelected) {
+          await this.$store.dispatch("logIn", userInputs);
+        }
+        if (this.signupIsSelected) {
+          await this.$store.dispatch("signUp", userInputs);
+        }
+        this.$router.replace("/");
+      } catch (error) {
+        this.error = error.message || "Failed to Auth";
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 };
