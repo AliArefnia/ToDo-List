@@ -1,9 +1,7 @@
 <template>
   <main class="flex justify-center items-center h-full">
     <div>
-      <TransitionGroup
-        tag="section"
-        name="mainForm"
+      <section
         class="bg-zinc-600 min-w-[300px] md:w-[500px] rounded-xl p-6 transition-all duration-300 relative"
         :class="{
           'h-[65vh]': loginIsSelected,
@@ -35,8 +33,14 @@
           </button>
         </div>
 
-        <div class="w-full text-center text-2xl my-3 text-rose-500 h-fit my-10">
-          <p class="font-mono">{{ formIncommingMessage }}</p>
+        <div
+          class="w-full text-center text-2xl text-rose-500 h-fit my-10 container"
+        >
+          <transition name="text-swap" mode="out-in">
+            <p class="font-mono" :key="formIncommingMessage">
+              {{ formIncommingMessage }}
+            </p>
+          </transition>
         </div>
 
         <!-- <label for="email" class="">Email:</label> -->
@@ -65,13 +69,14 @@
             />
           </Transition>
         </div>
-        <transition name="formSubmitButton">
+        <transition name="text-swap">
           <BaseButton
             class="submitButton w-full text-2xl opacity-100 h-[4rem] transition-transform"
+            :key="formSubmitButton"
             >{{ formSubmitButton }}</BaseButton
           >
         </transition>
-      </TransitionGroup>
+      </section>
     </div>
   </main>
 </template>
@@ -124,11 +129,44 @@ export default {
   opacity: 1;
 }
 
+.formincommingMessage-enter-active,
+.formIncommingMessage-leave-active {
+  transition: all 1s ease-out;
+}
+.formIncommingMessage-enter-from,
+.formIncommingMessage-leave-to {
+  /* max-width: 0; */
+  opacity: 0;
+}
+.formIncommingMessage-enter-to,
+.formIncommingMessage-leave-from {
+  /* max-width: 100%; */
+  opacity: 1;
+}
+
 .submitButton {
   position: absolute;
   bottom: 20px;
   left: 20px;
   width: calc(100% - 40px);
   transition: bottom 0.3s ease-out;
+}
+
+.text-swap-enter-active {
+  transition: all 0.3s ease;
+}
+
+.text-swap-leave-active {
+  transition: all 0.2s ease;
+}
+
+.text-swap-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.text-swap-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>
