@@ -142,18 +142,31 @@ export default {
   },
 
   async signUp(context, payload) {
+    console.log("user signup");
+    return context.dispatch("auth", { ...payload, mode: "signUp" });
+  },
+  async logIn(context, payload) {
+    console.log("user signup");
+    return context.dispatch("auth", { ...payload, mode: "logIn" });
+  },
+
+  async auth(context, payload) {
+    const mode = payload.mode;
+
+    let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
+    if (mode === "logIn") {
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
+    }
+
     try {
-      const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: payload.email,
-            password: payload.password,
-            returnSecureToken: true,
-          }),
-        }
-      );
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          email: payload.email,
+          password: payload.password,
+          returnSecureToken: true,
+        }),
+      });
       const responseData = await response.json();
 
       if (!response) {
@@ -163,44 +176,29 @@ export default {
         throw error;
       }
 
+      localStorage.setItem("token", responseData.idToken);
+      localStorage.setItem("userId", responseData.localId);
+
       console.log(responseData);
 
       context.commit("setUser", {
-        token: responseData.token,
+        token: responseData.idToken,
         userId: responseData.localId,
         tokenExpiration: responseData.expiresIn,
       });
     } catch {}
   },
-  async logIn(context, payload) {
-    try {
-      const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: payload.email,
-            password: payload.password,
-            returnSecureToken: true,
-          }),
-        }
-      );
-      const responseData = await response.json();
 
-      if (!response) {
-        console.log(responseData);
-        const error =
-          new Error(responseData.message) || "Failed to authenticate!";
-        throw error;
-      }
+  tryLogin(context) {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
 
-      console.log(responseData);
-
+    if (token && userId) {
       context.commit("setUser", {
-        token: responseData.token,
-        userId: responseData.localId,
-        tokenExpiration: responseData.expiresIn,
+        token: token,
+        userId: userId,
+        tokenExpiration: null,
       });
-    } catch {}
+    }
   },
 };

@@ -26,6 +26,7 @@ const router = createRouter({
       name: "importantTasks",
       meta: { requiresAuth: true },
       component: () => import("@/Pages/ImportantTasks.vue"),
+      meta: { requiresAuth: true },
     },
     {
       path: "/taskLists/:taskListItem",
@@ -39,6 +40,7 @@ const router = createRouter({
       name: "AllTasks",
       meta: { requiresAuth: true },
       component: () => import("@/Pages/AllTasks.vue"),
+      meta: { requiresAuth: true },
     },
     {
       path: "/login",
@@ -52,7 +54,7 @@ const router = createRouter({
 router.beforeEach(function (to, from, next) {
   if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
     next("/login");
-  } else if (to.meta.requiresUnAuth) {
+  } else if (to.meta.requiresUnAuth && store.getters.isAuthenticated) {
     next("/");
   } else {
     next();
