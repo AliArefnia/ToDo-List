@@ -13,4 +13,10 @@ export default {
   isAuthenticated(state) {
     return !!state.token;
   },
+  getUserId(state) {
+    return state.userId;
+  },
+  getToken(state) {
+    return state.token;
+  },
 };

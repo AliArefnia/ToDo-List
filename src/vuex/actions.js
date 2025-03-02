@@ -3,28 +3,49 @@ const URL = import.meta.env.VITE_URL;
 
 export default {
   async sendTasks(context, payload) {
-    const task = payload;
+    const user = context.getters.getUserId;
+    const token = context.getters.getToken;
 
-    const responce = await fetch(`${URL}/tasks/tasks.json`, {
-      method: "POST",
-      body: JSON.stringify(task),
-    });
+    if (!user || !token) {
+      throw new Error("User not authenticated");
+    }
+
+    // const task = payload;
+    console.log(context);
+    const responce = await fetch(
+      `${URL}/users/${user}/tasks.json?auth=${token}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
     const responceData = await responce.json();
     if (!responce.ok) {
-      const error = new Error(responceData.message || "Failed to fetch data");
+      const error = new Error(responceData.message || "Failed to Create Task");
       throw error;
     }
     const id = responceData.name;
-    context.commit("addNewTask", { ...task, id });
+    context.commit("addNewTask", { ...payload, id });
   },
 
   async sendTasksLists(context, payload) {
+    const user = context.getters.getUserId;
+    const token = context.getters.getToken;
     const taskList = payload;
-    const responce = await fetch(`${URL}/tasks/tasksLists.json`, {
-      method: "POST",
-      body: JSON.stringify(taskList),
-    });
+    const responce = await fetch(
+      `${URL}/users/${user}/tasksLists.json?auth=${token}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(taskList),
+      }
+    );
 
     const responceData = await responce.json();
     if (!responce.ok) {
@@ -37,7 +58,14 @@ export default {
   },
 
   async receiveTasks(context, payload) {
-    const responce = await fetch(`${URL}/tasks/tasks.json`);
+    const user = context.getters.getUserId;
+    const token = context.getters.getToken;
+    const responce = await fetch(
+      `${URL}/users/${user}/tasks.json?auth=${token}`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     const responceData = await responce.json();
     if (!responce.ok) {
@@ -74,7 +102,14 @@ export default {
   },
 
   async receiveTasksLists(context, payload) {
-    const responce = await fetch(`${URL}/tasks/tasksLists.json`);
+    const user = context.getters.getUserId;
+    const token = context.getters.getToken;
+    const responce = await fetch(
+      `${URL}/users/${user}/tasksLists.json?auth=${token}`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
     const responceData = await responce.json();
     if (!responce.ok) {
       const error = new Error(responceData.message || "Failed to fetch data");
@@ -95,9 +130,17 @@ export default {
   },
 
   async deleteTask(context, taskId) {
-    const responce = await fetch(`${URL}tasks/tasks/${taskId}.json`, {
-      method: "DELETE",
-    });
+    const user = context.getters.getUserId;
+    const token = context.getters.getToken;
+    const responce = await fetch(
+      `${URL}/users/${user}/tasks/${taskId}.json?auth=${token}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const responceData = await responce.json();
     if (!responce.ok) {
       console.log("delete failed");
@@ -107,9 +150,17 @@ export default {
   },
 
   async deleteTaskList(context, taskListId) {
-    const responce = await fetch(`${URL}/tasks/tasksLists/${taskListId}.json`, {
-      method: "DELETE",
-    });
+    const user = context.getters.getUserId;
+    const token = context.getters.getToken;
+    const responce = await fetch(
+      `${URL}/users/${user}/tasksLists/${taskListId}.json?auth=${token}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const responceData = await responce.json();
     if (!responce.ok) {
       console.log("delete failed");
@@ -119,12 +170,19 @@ export default {
   },
 
   async toggleTaskStatus(context, { taskId, isFinished }) {
+    const user = context.getters.getUserId;
+    const token = context.getters.getToken;
     console.log(taskId, isFinished);
-    const responce = await fetch(`${URL}/tasks/tasks/${taskId}.json`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isFinished }),
-    });
+    const responce = await fetch(
+      `${URL}/users/${user}/tasks/${taskId}.json?auth=${token}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isFinished }),
+      }
+    );
     const responceData = await responce.json();
     if (!responce.ok) {
       console.error("error happened");
@@ -152,6 +210,9 @@ export default {
     try {
       const response = await fetch(url, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           email: payload.email,
           password: payload.password,

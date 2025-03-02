@@ -132,9 +132,8 @@ export default {
         this.$router.replace("/");
       } catch (error) {
         this.error = error.message || "Failed to Auth";
-      } finally {
-        this.isLoading = false;
       }
+      this.isLoading = false;
     },
   },
 };
