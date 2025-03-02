@@ -1,13 +1,14 @@
-const API_KEY = "AIzaSyAfvqTdgLhk7_mKxAp2X4iKef1KxKV1I18";
+const API_KEY = import.meta.env.VITE_API_KEY;
+const URL = import.meta.env.VITE_URL;
 
 export default {
   async sendTasks(context, payload) {
     const task = payload;
 
-    const responce = await fetch(
-      "https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasks.json",
-      { method: "POST", body: JSON.stringify(task) }
-    );
+    const responce = await fetch(`${URL}/tasks/tasks.json`, {
+      method: "POST",
+      body: JSON.stringify(task),
+    });
 
     const responceData = await responce.json();
     if (!responce.ok) {
@@ -20,10 +21,10 @@ export default {
 
   async sendTasksLists(context, payload) {
     const taskList = payload;
-    const responce = await fetch(
-      "https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasksLists.json",
-      { method: "POST", body: JSON.stringify(taskList) }
-    );
+    const responce = await fetch(`${URL}/tasks/tasksLists.json`, {
+      method: "POST",
+      body: JSON.stringify(taskList),
+    });
 
     const responceData = await responce.json();
     if (!responce.ok) {
@@ -36,9 +37,7 @@ export default {
   },
 
   async receiveTasks(context, payload) {
-    const responce = await fetch(
-      "https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasks.json"
-    );
+    const responce = await fetch(`${URL}/tasks/tasks.json`);
 
     const responceData = await responce.json();
     if (!responce.ok) {
@@ -75,10 +74,7 @@ export default {
   },
 
   async receiveTasksLists(context, payload) {
-    const responce = await fetch(
-      "https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasksLists.json"
-    );
-
+    const responce = await fetch(`${URL}/tasks/tasksLists.json`);
     const responceData = await responce.json();
     if (!responce.ok) {
       const error = new Error(responceData.message || "Failed to fetch data");
@@ -99,10 +95,9 @@ export default {
   },
 
   async deleteTask(context, taskId) {
-    const responce = await fetch(
-      `https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasks/${taskId}.json`,
-      { method: "DELETE" }
-    );
+    const responce = await fetch(`${URL}tasks/tasks/${taskId}.json`, {
+      method: "DELETE",
+    });
     const responceData = await responce.json();
     if (!responce.ok) {
       console.log("delete failed");
@@ -112,10 +107,9 @@ export default {
   },
 
   async deleteTaskList(context, taskListId) {
-    const responce = await fetch(
-      `https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasksLists/${taskListId}.json`,
-      { method: "DELETE" }
-    );
+    const responce = await fetch(`${URL}/tasks/tasksLists/${taskListId}.json`, {
+      method: "DELETE",
+    });
     const responceData = await responce.json();
     if (!responce.ok) {
       console.log("delete failed");
@@ -126,14 +120,11 @@ export default {
 
   async toggleTaskStatus(context, { taskId, isFinished }) {
     console.log(taskId, isFinished);
-    const responce = await fetch(
-      `https://todo-list-f0129-default-rtdb.europe-west1.firebasedatabase.app/tasks/tasks/${taskId}.json`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isFinished }),
-      }
-    );
+    const responce = await fetch(`${URL}/tasks/tasks/${taskId}.json`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isFinished }),
+    });
     const responceData = await responce.json();
     if (!responce.ok) {
       console.error("error happened");
