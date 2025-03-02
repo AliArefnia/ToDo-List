@@ -28,3 +28,25 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Environment
+.env
+.env.*
+!.env.example  # Keep template
+
+# Keys/Certs
+*.key
+*.p12
+*.crt
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
