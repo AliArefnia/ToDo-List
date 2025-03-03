@@ -3,38 +3,37 @@ const URL = import.meta.env.VITE_URL;
 
 export default {
   async sendTasks(context, payload) {
-    const user = context.getters.getUserId;
-    const token = context.getters.getToken;
+    const { user, token } = getUserAuth(context);
 
-    if (!user || !token) {
-      throw new Error("User not authenticated");
-    }
+    try {
+      const responce = await fetch(
+        `${URL}/users/${user}/tasks.json?auth=${token}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
-    // const task = payload;
-    console.log(context);
-    const responce = await fetch(
-      `${URL}/users/${user}/tasks.json?auth=${token}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+      const responceData = await responce.json();
+      if (!responce.ok) {
+        const error = new Error(
+          responceData.message || "Failed to Create Task"
+        );
+        throw error;
       }
-    );
-
-    const responceData = await responce.json();
-    if (!responce.ok) {
-      const error = new Error(responceData.message || "Failed to Create Task");
+      const id = responceData.name;
+      context.commit("addNewTask", { ...payload, id });
+    } catch (error) {
+      console.error("API Error:", error.message);
       throw error;
     }
-    const id = responceData.name;
-    context.commit("addNewTask", { ...payload, id });
   },
 
   async sendTasksLists(context, payload) {
-    const user = context.getters.getUserId;
-    const token = context.getters.getToken;
+    const { user, token } = getUserAuth(context);
     const taskList = payload;
     const responce = await fetch(
       `${URL}/users/${user}/tasksLists.json?auth=${token}`,
@@ -52,14 +51,11 @@ export default {
       const error = new Error(responceData.message || "Failed to fetch data");
       throw error;
     }
-
-    // const id = responceData.name;
     context.commit("addNewList", taskList);
   },
 
   async receiveTasks(context, payload) {
-    const user = context.getters.getUserId;
-    const token = context.getters.getToken;
+    const { user, token } = getUserAuth(context);
     const responce = await fetch(
       `${URL}/users/${user}/tasks.json?auth=${token}`,
       {
@@ -102,8 +98,7 @@ export default {
   },
 
   async receiveTasksLists(context, payload) {
-    const user = context.getters.getUserId;
-    const token = context.getters.getToken;
+    const { user, token } = getUserAuth(context);
     const responce = await fetch(
       `${URL}/users/${user}/tasksLists.json?auth=${token}`,
       {
@@ -130,8 +125,7 @@ export default {
   },
 
   async deleteTask(context, taskId) {
-    const user = context.getters.getUserId;
-    const token = context.getters.getToken;
+    const { user, token } = getUserAuth(context);
     const responce = await fetch(
       `${URL}/users/${user}/tasks/${taskId}.json?auth=${token}`,
       {
@@ -150,8 +144,7 @@ export default {
   },
 
   async deleteTaskList(context, taskListId) {
-    const user = context.getters.getUserId;
-    const token = context.getters.getToken;
+    const { user, token } = getUserAuth(context);
     const responce = await fetch(
       `${URL}/users/${user}/tasksLists/${taskListId}.json?auth=${token}`,
       {
@@ -170,8 +163,7 @@ export default {
   },
 
   async toggleTaskStatus(context, { taskId, isFinished }) {
-    const user = context.getters.getUserId;
-    const token = context.getters.getToken;
+    const { user, token } = getUserAuth(context);
     console.log(taskId, isFinished);
     const responce = await fetch(
       `${URL}/users/${user}/tasks/${taskId}.json?auth=${token}`,
@@ -202,7 +194,7 @@ export default {
   async auth(context, payload) {
     const mode = payload.mode;
 
-    let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
+    let url = `https://identitytoolkit.googlea  pis.com/v1/accounts:signUp?key=${API_KEY}`;
     if (mode === "logIn") {
       url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
     }
@@ -221,7 +213,7 @@ export default {
       });
       const responseData = await response.json();
 
-      if (!response) {
+      if (!response.ok) {
         console.log(responseData);
         const error =
           new Error(responseData.message) || "Failed to authenticate!";
@@ -238,7 +230,11 @@ export default {
         userId: responseData.localId,
         tokenExpiration: responseData.expiresIn,
       });
-    } catch {}
+    } catch (error) {
+      console.log(error.message);
+      console.error("API Error:", error.message);
+      throw error;
+    }
   },
 
   tryLogin(context) {
@@ -254,3 +250,14 @@ export default {
     }
   },
 };
+
+function getUserAuth(context) {
+  const user = context.getters.getUserId;
+  const token = context.getters.getToken;
+
+  if (!user || !token) {
+    throw new Error("User not authenticated");
+  }
+
+  return { user, token };
+}

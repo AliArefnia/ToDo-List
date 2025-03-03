@@ -97,6 +97,7 @@ export default {
       passwordRepeat: "",
       formIsValid: true,
       isLoading: false,
+      error: null,
     };
   },
 
@@ -122,6 +123,7 @@ export default {
         password: this.password,
       };
       this.isLoading = true;
+      this.error = null;
       try {
         if (this.loginIsSelected) {
           await this.$store.dispatch("logIn", userInputs);
@@ -131,6 +133,7 @@ export default {
         }
         this.$router.replace("/");
       } catch (error) {
+        console.log(error.message);
         this.error = error.message || "Failed to Auth";
       }
       this.isLoading = false;
