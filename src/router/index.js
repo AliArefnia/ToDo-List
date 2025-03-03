@@ -4,6 +4,7 @@ import TaskItems from "@/components/TaskItems.vue";
 import Today from "@/Pages/Today.vue";
 import Login from "@/Pages/Login.vue";
 import store from "@/vuex";
+import ResetPassword from "@/Pages/ResetPassword.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,6 +47,12 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: Login,
+      meta: { requiresUnAuth: true },
+    },
+    {
+      path: "/ResetPassword",
+      name: "ResetPassword",
+      component: ResetPassword,
       meta: { requiresUnAuth: true },
     },
   ],
