@@ -61,6 +61,16 @@
             placeholder="Password"
             v-model="password"
           />
+          <transition name="text-swap">
+            <p
+              v-if="loginIsSelected"
+              to="ResetPassword"
+              class="text-rose-500 self-end font-mono text-md -mt-4 cursor-pointer"
+              @click="resetPassword"
+            >
+              Forget password?
+            </p>
+          </transition>
           <Transition name="newFieldComming">
             <input
               class="border-2 h-[3rem] rounded-md bg-priamry px-3 mb-6 w-full"
@@ -154,6 +164,46 @@ export default {
       this.signupIsSelected = !this.signupIsSelected;
       this.error = "";
     },
+
+    async resetPassword() {
+      this.error = "";
+      await nextTick();
+      if (!validateEmail(this.email)) {
+        this.error = "Email is Invalid!";
+        return;
+      }
+
+      console.log("reset pass");
+      const userEmail = {
+        email: this.email,
+      };
+      const response = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${
+          import.meta.env.VITE_API_KEY
+        }`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            requestType: "PASSWORD_RESET",
+            email: this.email,
+          }),
+        }
+      );
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        const error = new Error(
+          responseData.error?.message || "Failed to Create Task"
+        );
+        throw error;
+      }
+      console.log(this.$router);
+      this.$router.replace("/ResetPassword");
+      console.log(responseData);
+      // this.$store.dispatch("resetPassword",userEmail)
+    },
+
     async submitData() {
       this.error = "";
       await nextTick();

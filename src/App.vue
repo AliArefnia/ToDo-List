@@ -41,7 +41,12 @@ export default {
     }"
   >
     <div class="flex w-full flex-col">
-      <header class="px-6 py-4" v-if="this.$route.name !== 'login'">
+      <header
+        class="px-6 py-4"
+        v-if="
+          this.$route.name !== 'login' && this.$route.name !== 'ResetPassword'
+        "
+      >
         <RouterLink v-if="notNavPage" to="/navigator" class="flex w-fit">
           <span class="flex items-center hover:brightness-150 w-fit">
             <ArrowLeftFromLine
@@ -55,7 +60,7 @@ export default {
 
       <!-- <RouterView -->
       <RouterView
-        class="flex flex-col w-full p-6 pt-0 overflow-auto"
+        class="flex flex-col w-full lg:p-6 p-2 pt-0 overflow-auto"
         v-slot="slotProps"
       >
         <transition :name="this.route" mode="out-in">
