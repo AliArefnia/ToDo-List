@@ -2,7 +2,7 @@
   <main class="flex justify-center items-center h-full">
     <div>
       <section
-        class="bg-zinc-600 min-w-[300px] md:w-[500px] rounded-xl p-6 transition-all duration-300 relative"
+        class="bg-zinc-600 min-w-[300px] w-[95vw] md:w-[500px] rounded-xl p-6 transition-all duration-300 relative"
         :class="{
           'h-[65vh]': loginIsSelected,
           'h-[75vh]': !loginIsSelected,
@@ -16,7 +16,7 @@
               'w-1/3 bg-zinc-400 hover:bg-[#9898b4] hover:text-white ':
                 !loginIsSelected,
             }"
-            @click="switchLogInSignUp"
+            @click.stop="switchLogInSignUp('logIn')"
           >
             Log In
           </button>
@@ -27,7 +27,7 @@
               'w-1/3 bg-zinc-400 hover:bg-[#9898b4] hover:text-white':
                 !signupIsSelected,
             }"
-            @click="switchLogInSignUp"
+            @click.stop="switchLogInSignUp('signUp')"
           >
             Sign Up
           </button>
@@ -44,7 +44,7 @@
               {{ formGuideMessage.message }}
               <span
                 class="text-rose-500 cursor-pointer"
-                @click="switchLogInSignUp"
+                @click="switchLogInSignUp(formGuideMessage.page)"
               >
                 {{ formGuideMessage.guide }}</span
               >
@@ -74,7 +74,7 @@
             <p
               v-if="loginIsSelected"
               to="ResetPassword"
-              class="text-rose-500 self-end font-mono text-md -mt-4 cursor-pointer"
+              class="text-rose-500 self-end font-mono text-sm md:text-md -mt-4 cursor-pointer mb-2"
               @click="resetPassword"
             >
               Forget password?
@@ -93,7 +93,7 @@
           <transition name="text-swap">
             <p
               v-if="!!this.error"
-              class="text-rose-500 self-start font-mono text-lg"
+              class="text-rose-500 self-start font-mono text-md md:text-lg font-bold"
             >
               {{ errorMessage }}
             </p>
@@ -140,8 +140,16 @@ export default {
 
     formGuideMessage() {
       return this.loginIsSelected === true
-        ? { message: "don't have an account?", guide: "Sign Up" }
-        : { message: "already have an account?", guide: "Log In" };
+        ? {
+            message: "don't have an account?",
+            guide: "Sign Up",
+            page: "signUp",
+          }
+        : {
+            message: "already have an account?",
+            guide: "Log In",
+            page: "logIn",
+          };
     },
 
     formSubmitButton() {
@@ -170,14 +178,24 @@ export default {
         case "Conflict password repeat":
           return "Password repeat doesn't match!";
           break;
+        case "TOO_MANY_ATTEMPTS_TRY_LATER":
+          return "too many attemps, try later!";
+          break;
       }
     },
   },
 
   methods: {
-    switchLogInSignUp() {
-      this.loginIsSelected = !this.loginIsSelected;
-      this.signupIsSelected = !this.signupIsSelected;
+    switchLogInSignUp(form) {
+      if (form === "signUp") {
+        this.loginIsSelected = false;
+        this.signupIsSelected = true;
+      }
+      if (form === "logIn") {
+        this.loginIsSelected = true;
+        this.signupIsSelected = false;
+      }
+
       this.error = "";
     },
 
