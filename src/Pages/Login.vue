@@ -71,6 +71,14 @@
               v-model="passwordRepeat"
             />
           </Transition>
+          <transition name="text-swap">
+            <p
+              v-if="!!this.error"
+              class="text-rose-500 self-start font-mono text-lg"
+            >
+              {{ errorMessage }}
+            </p>
+          </transition>
         </div>
         <transition name="text-swap">
           <BaseButton
@@ -87,6 +95,9 @@
 
 <script>
 import BaseButton from "@/components/ui/BaseButton.vue";
+import validatePassword from "@/helpers/ValidatePassword";
+import validateEmail from "@/helpers/ValidateEmailAddress";
+import { nextTick } from "vue";
 export default {
   data() {
     return {
@@ -97,6 +108,7 @@ export default {
       passwordRepeat: "",
       formIsValid: true,
       isLoading: false,
+      error: null,
     };
   },
 
@@ -109,19 +121,62 @@ export default {
     formSubmitButton() {
       return this.loginIsSelected === true ? "LOG IN" : "GET STARTED";
     },
+    errorMessage() {
+      switch (this.error) {
+        case "INVALID_LOGIN_CREDENTIALS":
+          return "Email or Password is Wrong!";
+          break;
+        case "Email is Invalid!":
+          return "Enter a valid email!";
+          break;
+        case "Password is Invalid!":
+          return "Enter a Valid Password!";
+          break;
+        case "Failed to fetch":
+          return "Failed to fetch! try again.";
+          break;
+        case "WEAK_PASSWORD : Password should be at least 6 characters":
+          return "Password should be at least 6 characters";
+          break;
+        case "EMAIL_EXISTS":
+          return "This email already exists!";
+          break;
+        case "Conflict password repeat":
+          return "Password repeat doesn't match!";
+          break;
+      }
+    },
   },
 
   methods: {
     switchLogInSignUp() {
       this.loginIsSelected = !this.loginIsSelected;
       this.signupIsSelected = !this.signupIsSelected;
+      this.error = "";
     },
     async submitData() {
+      this.error = "";
+      await nextTick();
+      if (!validateEmail(this.email)) {
+        this.error = "Email is Invalid!";
+        return;
+      }
+      if (!validatePassword(this.password)) {
+        this.error = "Password is Invalid!";
+        return;
+      }
+
+      if (this.password !== this.passwordRepeat) {
+        this.error = "Conflict password repeat";
+        return;
+      }
+
       const userInputs = {
         email: this.email,
         password: this.password,
       };
       this.isLoading = true;
+      this.error = null;
       try {
         if (this.loginIsSelected) {
           await this.$store.dispatch("logIn", userInputs);
