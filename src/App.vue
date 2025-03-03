@@ -27,6 +27,7 @@ export default {
 
   created() {
     this.$store.dispatch("tryLogin");
+    console.log(import.meta.env);
   },
 };
 </script>
@@ -40,7 +41,7 @@ export default {
     }"
   >
     <div class="flex w-full flex-col">
-      <header class="px-6 py-4">
+      <header class="px-6 py-4" v-if="this.$route.name !== 'login'">
         <RouterLink v-if="notNavPage" to="/navigator" class="flex w-fit">
           <span class="flex items-center hover:brightness-150 w-fit">
             <ArrowLeftFromLine
