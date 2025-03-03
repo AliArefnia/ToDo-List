@@ -165,10 +165,11 @@ export default {
         this.error = "Password is Invalid!";
         return;
       }
-
-      if (this.password !== this.passwordRepeat) {
-        this.error = "Conflict password repeat";
-        return;
+      if (this.signupIsSelected) {
+        if (this.password !== this.passwordRepeat) {
+          this.error = "Conflict password repeat";
+          return;
+        }
       }
 
       const userInputs = {
