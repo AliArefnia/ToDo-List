@@ -40,4 +40,7 @@ export default {
     state.token = payload.token;
     state.tokenExpiration = payload.tokenExpiration;
   },
+  SetAuthenticated(state, token) {
+    state.token = token;
+  },
 };
