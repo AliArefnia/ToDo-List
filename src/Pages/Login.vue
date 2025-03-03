@@ -33,12 +33,21 @@
           </button>
         </div>
 
-        <div
-          class="w-full text-center text-2xl text-rose-500 h-fit my-10 container"
-        >
+        <div class="w-full text-center text-2xl h-fit my-10 container">
           <transition name="text-swap" mode="out-in">
-            <p class="font-mono" :key="formIncommingMessage">
+            <p :key="formIncommingMessage" class="font-mono text-rose-500">
               {{ formIncommingMessage }}
+            </p>
+          </transition>
+          <transition name="text-swap" mode="out-in">
+            <p :key="formGuideMessage.guide" class="font-mono text-sm">
+              {{ formGuideMessage.message }}
+              <span
+                class="text-rose-500 cursor-pointer"
+                @click="switchLogInSignUp"
+              >
+                {{ formGuideMessage.guide }}</span
+              >
             </p>
           </transition>
         </div>
@@ -128,6 +137,13 @@ export default {
         ? "Welcome Back!"
         : "Sign Up for Free";
     },
+
+    formGuideMessage() {
+      return this.loginIsSelected === true
+        ? { message: "don't have an account?", guide: "Sign Up" }
+        : { message: "already have an account?", guide: "Log In" };
+    },
+
     formSubmitButton() {
       return this.loginIsSelected === true ? "LOG IN" : "GET STARTED";
     },
