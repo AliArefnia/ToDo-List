@@ -186,6 +186,7 @@ export default {
         }
         this.$router.replace("/");
       } catch (error) {
+        console.log(error.message);
         this.error = error.message || "Failed to Auth";
       }
       this.isLoading = false;
