@@ -12,7 +12,8 @@ const store = createStore({
       taskLists: [],
       userId: null,
       token: null,
-      tokenExpiration: null,
+      tokenExpirationDate: null,
+      refreshToken: null,
     };
   },
 

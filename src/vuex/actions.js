@@ -1,6 +1,6 @@
 const API_KEY = import.meta.env.VITE_API_KEY;
 const URL = import.meta.env.VITE_URL;
-
+let timer;
 export default {
   async sendTasks(context, payload) {
     const { user, token } = getUserAuth(context);
@@ -221,15 +221,28 @@ export default {
         throw error;
       }
 
-      localStorage.setItem("token", responseData.idToken);
+      // const tokenExpirationTime = 10000;
+      const tokenExpirationTime = responseData.expiresIn * 1000;
+      const tokenExpirationDate = Date.now() + tokenExpirationTime;
+
+      console.log(tokenExpirationTime);
+
+      localStorage.setItem("refreshToken", responseData.refreshToken);
       localStorage.setItem("userId", responseData.localId);
+      localStorage.setItem("tokenExpirationDate", tokenExpirationDate);
+
+      timer = setTimeout(() => {
+        context.dispatch("logOut");
+      }, tokenExpirationTime);
 
       console.log(responseData);
 
       context.commit("setUser", {
         token: responseData.idToken,
         userId: responseData.localId,
-        tokenExpiration: responseData.expiresIn,
+        refreshToken: responseData.refreshToken,
+        // tokenExpiration:tokenExpirationTime,
+        tokenExpirationDate: tokenExpirationDate,
       });
     } catch (error) {
       console.log(error.message);
@@ -240,14 +253,28 @@ export default {
 
   tryLogin(context) {
     const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
+    const refreshToken = localStorage.getItem("refreshToken");
+    const tokenExpirationDate = localStorage.getItem("tokenExpirationDate");
 
-    if (token && userId) {
+    const tokenExpiration = +tokenExpirationDate - Date.now();
+    console.log(tokenExpiration);
+
+    console.log();
+    if (tokenExpiration < 0) {
+      return;
+    }
+    timer = setTimeout(() => {
+      context.dispatch("logOut");
+    }, tokenExpiration);
+
+    console.log(refreshToken, userId, tokenExpirationDate);
+    if (refreshToken && userId) {
       context.commit("setUser", {
-        token: token,
+        refreshToken: refreshToken,
         userId: userId,
-        tokenExpiration: null,
+        tokenExpirationDate: tokenExpirationDate,
       });
+    } else {
     }
   },
 
