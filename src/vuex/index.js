@@ -13,7 +13,7 @@ const store = createStore({
       userId: null,
       token: null,
       tokenExpirationDate: null,
-      refreshToken: null,
+      refreshToken: localStorage.getItem("refreshToken") || null,
     };
   },
 
