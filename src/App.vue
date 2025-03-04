@@ -23,11 +23,15 @@ export default {
         body.classList = "bg-priamry lg:bg-black";
       }
     },
+    "$store.getters.isAuthenticated"(newValue, oldValue) {
+      if (!newValue) {
+        this.$router.replace("/login");
+      }
+    },
   },
 
   created() {
     this.$store.dispatch("tryLogin");
-    console.log(import.meta.env);
   },
 };
 </script>

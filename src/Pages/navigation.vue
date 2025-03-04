@@ -34,10 +34,7 @@ export default {
   },
   methods: {
     logOut() {
-      localStorage.removeItem("token");
-      localStorage.removeItem("userId");
-      this.$store.commit("SetAuthenticated", false);
-      this.$router.replace("/login");
+      this.$store.dispatch("logOut");
     },
   },
 };

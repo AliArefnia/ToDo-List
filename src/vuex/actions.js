@@ -250,6 +250,21 @@ export default {
       });
     }
   },
+
+  logOut(context) {
+    console.log("logout");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("tokenExpirationDate");
+
+    context.commit("setUser", {
+      userId: null,
+      token: null,
+      refreshToken: null,
+      tokenExpiration: null,
+    });
+    context.commit("SetAuthenticated", false);
+  },
 };
 
 function getUserAuth(context) {

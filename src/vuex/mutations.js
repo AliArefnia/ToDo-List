@@ -38,7 +38,8 @@ export default {
   setUser(state, payload) {
     state.userId = payload.userId;
     state.token = payload.token;
-    state.tokenExpiration = payload.tokenExpiration;
+    state.refreshToken = payload.refreshToken;
+    state.tokenExpirationDate = payload.tokenExpirationDate;
   },
   SetAuthenticated(state, token) {
     state.token = token;
