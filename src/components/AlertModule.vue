@@ -2,8 +2,8 @@
   <teleport to="body">
     <div v-if="show" @click="tryClose" class="backdrop"></div>
     <transition name="dialog">
-      <dialog open v-if="show">
-        <header>
+      <dialog open v-if="show" class="font-sans">
+        <header class="bg-rose-500 text-lg">
           <slot name="header">
             <h2>{{ title }}</h2>
           </slot>
@@ -12,7 +12,7 @@
           <slot></slot>
         </section>
         <menu v-if="!fixed">
-          <slot name="actions">
+          <slot name="actions" :close="tryClose">
             <BaseButton @click="tryClose">Close</BaseButton>
           </slot>
         </menu>
@@ -70,6 +70,7 @@ export default {
   opacity: 1;
   transform: scale(1);
 }
+
 .backdrop {
   position: fixed;
   top: 0;
@@ -96,7 +97,6 @@ dialog {
 }
 
 header {
-  background-color: #3a0061;
   color: white;
   width: 100%;
   padding: 1rem;
@@ -115,12 +115,5 @@ menu {
   display: flex;
   justify-content: flex-end;
   margin: 0;
-}
-
-@media (min-width: 768px) {
-  dialog {
-    left: calc(50% - 20rem);
-    width: 40rem;
-  }
 }
 </style>

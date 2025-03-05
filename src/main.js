@@ -11,6 +11,7 @@ import { Trash2, ChevronLeft, ArrowLeftFromLine } from "lucide-vue-next";
 import Tasks from "./components/Tasks.vue";
 import TasksSections from "./components/TasksSections.vue";
 import BaseSpinner from "./components/ui/BaseSpinner.vue";
+import AlertModule from "./components/AlertModule.vue";
 
 const app = createApp(App);
 
@@ -26,5 +27,6 @@ app.component("ArrowLeftFromLine", ArrowLeftFromLine);
 app.component("Tasks", Tasks);
 app.component("TasksSections", TasksSections);
 app.component("BaseSpinner", BaseSpinner);
+app.component("AlertModule", AlertModule);
 
 app.mount("#app");
