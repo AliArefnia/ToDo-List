@@ -20,4 +20,7 @@ export default {
   getToken(state) {
     return state.token;
   },
+  getNewTokensReceived(state) {
+    return state.newTokensReceived;
+  },
 };

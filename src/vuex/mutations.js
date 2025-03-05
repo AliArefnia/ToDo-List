@@ -44,4 +44,7 @@ export default {
   SetAuthenticated(state, token) {
     state.token = token;
   },
+  setNewTokensReceived(state, payload) {
+    state.newTokensReceived = payload;
+  },
 };

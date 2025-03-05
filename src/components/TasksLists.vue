@@ -93,9 +93,10 @@ export default {
       notValidInput: false,
       repetitiveListName: false,
       errorMessage: null,
-      isLoading: false,
+      isLoading: true,
       newListName: "",
       tasksListsLocal: [],
+      receiveTimer: null,
     };
   },
 
@@ -166,6 +167,7 @@ export default {
       this.repetitiveListName = false;
     },
     async loadTasksLists() {
+      clearInterval(this.receiveTimer);
       this.isLoading = true;
       try {
         await this.$store.dispatch("receiveTasksLists");
@@ -177,7 +179,12 @@ export default {
     },
   },
   created() {
-    this.loadTasksLists();
+    this.receiveTimer = setInterval(() => {
+      console.log("interval called");
+      if (this.$store.getters.getNewTokensReceived) {
+        this.loadTasksLists();
+      }
+    }, 1000);
   },
   mounted() {},
 };

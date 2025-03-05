@@ -14,6 +14,7 @@ const store = createStore({
       token: null,
       tokenExpirationDate: null,
       refreshToken: localStorage.getItem("refreshToken") || null,
+      newTokensReceived: true,
     };
   },
 

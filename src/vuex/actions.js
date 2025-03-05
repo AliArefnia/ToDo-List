@@ -231,8 +231,8 @@ export default {
         throw error;
       }
 
-      const tokenExpirationTime = 20000;
-      // const tokenExpirationTime = responseData.expiresIn * 1000;
+      // const tokenExpirationTime = 20000;
+      const tokenExpirationTime = responseData.expiresIn * 1000;
       const tokenExpirationDate = Date.now() + tokenExpirationTime;
 
       console.log(tokenExpirationTime);
@@ -251,7 +251,6 @@ export default {
         token: responseData.idToken,
         userId: responseData.localId,
         refreshToken: responseData.refreshToken,
-        // tokenExpiration:tokenExpirationTime,
         tokenExpirationDate: tokenExpirationDate,
       });
     } catch (error) {
@@ -268,30 +267,37 @@ export default {
     const tokenExpirationDate = localStorage.getItem("tokenExpirationDate");
 
     const tokenExpiration = +tokenExpirationDate - Date.now();
+    console.log(tokenExpiration);
     if (tokenExpiration < 0) {
       return;
     }
-
-    await context.dispatch("getNewTokens", { refreshToken, userId });
+    if (tokenExpiration > 10000) {
+      if (refreshToken && userId) {
+        context.commit("setUser", {
+          refreshToken: refreshToken,
+          userId: userId,
+          tokenExpirationDate: tokenExpirationDate,
+        });
+      } else {
+      }
+    } else if (refreshToken) {
+      context.commit("setNewTokensReceived", false);
+      await context.dispatch("getNewTokens", { refreshToken, userId });
+      context.commit("setNewTokensReceived", true);
+    } else {
+      context.dispatch("logOut");
+    }
 
     const newTokenExpirationDate = localStorage.getItem("tokenExpirationDate");
     const newTokenExpiration = +newTokenExpirationDate - Date.now();
-    console.log("getNewTokens done");
+    // console.log(newTokenExpirationDate);
+    // console.log("getNewTokens done");
 
     timer = setTimeout(() => {
       context.dispatch("logOut");
     }, newTokenExpiration);
     console.warn(timer);
-
     console.log(refreshToken, userId, tokenExpirationDate);
-    if (refreshToken && userId) {
-      context.commit("setUser", {
-        refreshToken: refreshToken,
-        userId: userId,
-        tokenExpirationDate: tokenExpirationDate,
-      });
-    } else {
-    }
   },
 
   logOut(context) {
@@ -310,46 +316,50 @@ export default {
   },
 
   async getNewTokens(context, payload) {
-    console.warn("getNewTokens called");
-    const response = await fetch(
-      `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          grant_type: "refresh_token",
-          refresh_token: payload.refreshToken,
-        }),
+    try {
+      console.warn("getNewTokens called");
+      const response = await fetch(
+        `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            grant_type: "refresh_token",
+            refresh_token: payload.refreshToken,
+          }),
+        }
+      );
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        console.log(responseData);
+        const error =
+          new Error(responseData.error?.message) || "Failed to authenticate!";
+        console.log(responseData.error.message);
+        throw error;
       }
-    );
 
-    const responseData = await response.json();
-
-    if (!response.ok) {
       console.log(responseData);
-      const error =
-        new Error(responseData.error?.message) || "Failed to authenticate!";
-      console.log(responseData.error.message);
-      throw error;
+
+      const tokenExpirationDate = Date.now() + responseData.expires_in * 1000;
+      // const tokenExpirationDate = Date.now() + 20000;
+      console.log(payload.userId);
+      context.commit("setUser", {
+        token: responseData.id_token,
+        userId: payload.userId,
+        refreshToken: responseData.refresh_token,
+        tokenExpirationDate: tokenExpirationDate,
+      });
+      console.log(context.state.userId);
+
+      localStorage.setItem("refreshToken", responseData.refresh_token);
+      localStorage.setItem("tokenExpirationDate", tokenExpirationDate);
+    } catch (error) {
+      console.log("error in getting new token ");
     }
-
-    console.log(responseData);
-
-    // const tokenExpirationDate = Date.now() + responseData.expires_in * 1000;
-    const tokenExpirationDate = Date.now() + 20000;
-    console.log(payload.userId);
-    context.commit("setUser", {
-      token: responseData.id_token,
-      userId: payload.userId,
-      refreshToken: responseData.refresh_token,
-      tokenExpirationDate: tokenExpirationDate,
-    });
-    console.log(context.state.userId);
-
-    localStorage.setItem("refreshToken", responseData.refresh_token);
-    localStorage.setItem("tokenExpirationDate", tokenExpirationDate);
   },
 };
 

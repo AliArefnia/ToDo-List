@@ -152,10 +152,11 @@ export default {
     return {
       errorMessage: null,
       newTaskDescription: "",
-      isLoading: false,
+      isLoading: true,
       notValidInput: false,
       visibelPendingTasks: true,
       visibelFinishedTasks: true,
+      receiveTimer: null,
     };
   },
   methods: {
@@ -188,6 +189,7 @@ export default {
     },
 
     async loadTasks() {
+      clearInterval(this.receiveTimer);
       this.isLoading = true;
       try {
         await this.$store.dispatch("receiveTasks", this.list);
@@ -199,7 +201,12 @@ export default {
   },
 
   created() {
-    this.loadTasks();
+    this.receiveTimer = setInterval(() => {
+      console.log("interval called");
+      if (this.$store.getters.getNewTokensReceived) {
+        this.loadTasks();
+      }
+    }, 1000);
   },
   beforeUnmount() {
     this.$store.commit("clearTasks");
