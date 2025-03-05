@@ -1,7 +1,6 @@
 const API_KEY = import.meta.env.VITE_API_KEY;
 const URL = import.meta.env.VITE_URL;
 let timer;
-import { nextTick } from "vue";
 
 export default {
   async sendTasks(context, payload) {
@@ -236,21 +235,23 @@ export default {
       const tokenExpirationDate = Date.now() + tokenExpirationTime;
 
       console.log(tokenExpirationTime);
+      const refreshToken = responseData.refreshToken;
+      const userId = responseData.localId;
 
-      localStorage.setItem("refreshToken", responseData.refreshToken);
-      localStorage.setItem("userId", responseData.localId);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("userId", userId);
       localStorage.setItem("tokenExpirationDate", tokenExpirationDate);
 
       timer = setTimeout(() => {
-        context.dispatch("logOut");
-      }, tokenExpirationTime);
+        context.dispatch("tryLogin");
+      }, tokenExpirationTime - 60000);
 
       console.log(responseData);
 
       context.commit("setUser", {
         token: responseData.idToken,
-        userId: responseData.localId,
-        refreshToken: responseData.refreshToken,
+        userId: userId,
+        refreshToken: refreshToken,
         tokenExpirationDate: tokenExpirationDate,
       });
     } catch (error) {
@@ -268,34 +269,21 @@ export default {
 
     const tokenExpiration = +tokenExpirationDate - Date.now();
     console.log(tokenExpiration);
-    if (tokenExpiration < 0) {
-      return;
+    if (tokenExpiration < 0 || !refreshToken || !userId) {
+      return context.dispatch("logOut");
     }
-    if (tokenExpiration > 10000) {
-      if (refreshToken && userId) {
-        context.commit("setUser", {
-          refreshToken: refreshToken,
-          userId: userId,
-          tokenExpirationDate: tokenExpirationDate,
-        });
-      } else {
-      }
-    } else if (refreshToken) {
-      context.commit("setNewTokensReceived", false);
-      await context.dispatch("getNewTokens", { refreshToken, userId });
-      context.commit("setNewTokensReceived", true);
-    } else {
-      context.dispatch("logOut");
-    }
+
+    context.commit("setNewTokensReceived", false);
+    await context.dispatch("getNewTokens", { refreshToken, userId });
+    context.commit("setNewTokensReceived", true);
 
     const newTokenExpirationDate = localStorage.getItem("tokenExpirationDate");
     const newTokenExpiration = +newTokenExpirationDate - Date.now();
-    // console.log(newTokenExpirationDate);
-    // console.log("getNewTokens done");
 
     timer = setTimeout(() => {
-      context.dispatch("logOut");
-    }, newTokenExpiration);
+      context.dispatch("tryLogin");
+    }, newTokenExpiration - 60000);
+
     console.warn(timer);
     console.log(refreshToken, userId, tokenExpirationDate);
   },
@@ -335,7 +323,10 @@ export default {
       const responseData = await response.json();
 
       if (!response.ok) {
-        console.log(responseData);
+        if (responseData.error?.message === "TOKEN_EXPIRED") {
+          console.warn("Refresh token expired! Logging out...");
+          return context.dispatch("logOut");
+        }
         const error =
           new Error(responseData.error?.message) || "Failed to authenticate!";
         console.log(responseData.error.message);
@@ -359,6 +350,19 @@ export default {
       localStorage.setItem("tokenExpirationDate", tokenExpirationDate);
     } catch (error) {
       console.log("error in getting new token ");
+    }
+  },
+
+  scheduleTokenRefresh(context, { refreshToken, userId }) {
+    clearTimeout(timer);
+
+    const newTokenExpirationDate = localStorage.getItem("tokenExpirationDate");
+    const newTokenExpiration = +newTokenExpirationDate - Date.now();
+
+    if (newTokenExpiration > 60000) {
+      timer = setTimeout(() => {
+        context.dispatch("getNewTokens", { refreshToken, userId });
+      }, newTokenExpiration - 60000);
     }
   },
 };
