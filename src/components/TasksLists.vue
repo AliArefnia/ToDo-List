@@ -1,5 +1,32 @@
 <template>
   <div class="flex flex-col overflow-hidden h-full">
+    <AlertModule
+      :show="deletingTaskList"
+      @close="deletingTaskListDecision(false)"
+    >
+      <template #header>Deleting Task List</template>
+      <template #default>
+        <p class="!text-xl">Are You sure you want to remove the task List?</p>
+      </template>
+      <template #actions="{ close }">
+        <BaseButton
+          @click="
+            close;
+            deletingTaskListDecision(true);
+          "
+          class="border-2 border-rose-500 w-[5rem]"
+          >Yes</BaseButton
+        >
+        <BaseButton
+          @click="
+            close;
+            deletingTaskListDecision(false);
+          "
+          class="!bg-rose-500 w-[5rem] ml-2 text-white"
+          >No</BaseButton
+        >
+      </template>
+    </AlertModule>
     <!-- <section class="flex flex-col overflow-auto basis-3/4"> -->
     <TransitionGroup
       tag="section"
@@ -45,7 +72,7 @@
           >
             <BaseBinbutton
               class="my-1"
-              @click="deleteTaskList(tasklist.id)"
+              @click="tryToDeleteTaskLists(tasklist.id)"
             ></BaseBinbutton></div
         ></transition>
       </section>
@@ -97,6 +124,8 @@ export default {
       newListName: "",
       tasksListsLocal: [],
       receiveTimer: null,
+      deletingTaskList: false,
+      deletingTaskListId: null,
     };
   },
 
@@ -110,6 +139,19 @@ export default {
   },
 
   methods: {
+    tryToDeleteTaskLists(taskListId) {
+      this.deletingTaskList = true;
+      this.deletingTaskListId = taskListId;
+    },
+    deletingTaskListDecision(decision) {
+      this.deletingTaskList = decision;
+      if (decision === true) {
+        this.deleteTaskList(this.deletingTaskListId);
+      }
+      this.deletingTaskList = false;
+      this.deletingTaskListId = null;
+    },
+
     deleteTaskList(taskListId) {
       try {
         this.$store.dispatch("deleteTaskList", taskListId);
