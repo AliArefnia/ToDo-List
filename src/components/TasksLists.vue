@@ -33,19 +33,21 @@
       name="taskList"
       class="flex flex-col overflow-auto basis-3/4 lg:w-5/6 lg:mx-auto"
     >
-      <div id="loadingContainer" key="loadingContainer">
+      <div id="loadingContainer" key="loadingContainer" class="text-xl">
         <p
           class="text-gray-400"
           v-if="
             !this.isLoading && tasksLists.length === 0 && !this.errorMessage
           "
         >
-          You can add list here...
+          You have no list! Add lists here...
         </p>
-        <p class="text-gray-400" v-if="this.errorMessage">
+        <p v-if="this.errorMessage" class="text-gray-400">
           {{ this.errorMessage }}
         </p>
-        <p class="text-gray-400" v-if="this.isLoading">Loading Your lists...</p>
+        <p v-if="this.isLoading" class="text-gray-400 mb-2">
+          Loading Your lists...
+        </p>
         <BaseSpinner v-if="this.isLoading"></BaseSpinner>
       </div>
       <section
@@ -57,8 +59,11 @@
           :to="`/taskLists/${tasklist.name}`"
           :key="tasklist.name"
           :list="tasklist.name"
+          class="w-5/6"
         >
-          <p>{{ tasklist.name }}</p>
+          <div class="min-w-1/2 max-w-5/6 lg:max-w-full">
+            {{ tasklist.name }}
+          </div>
         </BaseRouterLinkList>
         <ChevronLeft
           class="bg-neutral-900 w-5 h-5 rounded-full flex items-center justify-center hover:cursor-pointer transition-transform duration-300"
@@ -89,6 +94,7 @@
         @focus="inputFocused"
         ref="inputRef"
         @input="clearNotValidInput"
+        autofocus
       />
       <transition name="validation">
         <p
@@ -273,5 +279,10 @@ export default {
 .taskList-enter-active,
 .taskList-leave-active {
   transition: opacity 0.5s ease-out;
+}
+a {
+  /* display: inline; Default, but ensures wrapping */
+  word-wrap: break-word; /* Breaks long words */
+  overflow-wrap: break-word; /* Alternative for better support */
 }
 </style>

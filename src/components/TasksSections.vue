@@ -2,7 +2,7 @@
   <div class="overflow-hidden">
     <div>
       <h2
-        class="text-3xl mb-2 font-mono italic uppercase text-rose-500 px-3 bg-zinc-600 rounded-xl inline-block"
+        class="lg:text-3xl md:text-2xl text-lg mb-2 font-mono italic uppercase text-rose-500 px-3 bg-zinc-600 rounded-xl inline-block w-full"
       >
         {{ list }}
       </h2>
@@ -17,6 +17,7 @@
           @focus="inputFocused"
           ref="inputRef"
           @input="clearNotValidInput"
+          autofocus
         />
         <BaseButton class="w-1/6 hidden lg:inline-block ml-4" @click="addTask"
           >Enter</BaseButton
@@ -283,5 +284,11 @@ export default {
 }
 .mainContent-enter-active {
   transition: all 0.5s ease-out;
+}
+
+h2 {
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 </style>
