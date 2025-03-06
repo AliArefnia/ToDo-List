@@ -1,52 +1,10 @@
 <template>
   <button class="h-7 mx-2 lg:mx-3 cursor-pointer">
     <slot>
-      <button
+      <CircleCheckBig
+        class="mt-[5px]"
         :class="{ buttonDone: !taskIsDone, buttonNotDone: taskIsDone }"
-      ></button>
-      <!-- <svg
-        xmlns="http://www.w3.org/2000/svg"
-        x="0px"
-        y="0px"
-        width="25"
-        height="25"
-        viewBox="0,0,256,256"
-      >
-        <g
-          fill="#20c997"
-          fill-rule="nonzero"
-          stroke="none"
-          stroke-width="none"
-          stroke-linecap="butt"
-          stroke-miterlimit="10"
-          stroke-dasharray=""
-          stroke-dashoffset="0"
-          font-family="none"
-          font-weight="none"
-          font-size="none"
-          text-anchor="none"
-          style="mix-blend-mode: normal"
-        >
-          <path
-            transform="translate(-1.72363,-1.79259) scale(5.12,5.12)"
-            d="M43.78125,9.64453c0.37109,0.66406 0.33594,1.47656 -0.09375,2.10547l-20.09375,30.6875c-0.3125,0.48047 -0.81641,0.80469 -1.38672,0.89063c-0.56641,0.08203 -1.14453,-0.08203 -1.58203,-0.45312l-13.9375,-12.0625c-0.60937,-0.44922 -0.91016,-1.19922 -0.78516,-1.94531c0.125,-0.74219 0.66016,-1.35156 1.37891,-1.57422c0.72266,-0.22656 1.50781,-0.02344 2.03125,0.51953l12.1875,10.53125l18.8125,-28.78125c0.35156,-0.5625 0.96094,-0.91406 1.625,-0.9375c0.75781,-0.03516 1.47266,0.35938 1.84375,1.01953z"
-            id="strokeMainSVG"
-            stroke="#20c997"
-            stroke-width="2"
-            stroke-linejoin="round"
-          ></path>
-          <g
-            transform="translate(-1.72363,-1.79259) scale(5.12,5.12)"
-            stroke="none"
-            stroke-width="1"
-            stroke-linejoin="miter"
-          >
-            <path
-              d="M41.9375,8.625c-0.66406,0.02344 -1.27344,0.375 -1.625,0.9375l-18.8125,28.78125l-12.1875,-10.53125c-0.52344,-0.54297 -1.30859,-0.74609 -2.03125,-0.51953c-0.71875,0.22266 -1.25391,0.83203 -1.37891,1.57422c-0.125,0.74609 0.17578,1.49609 0.78516,1.94531l13.9375,12.0625c0.4375,0.37109 1.01563,0.53516 1.58203,0.45313c0.57031,-0.08594 1.07422,-0.41016 1.38672,-0.89062l20.09375,-30.6875c0.42969,-0.62891 0.46484,-1.44141 0.09375,-2.10547c-0.37109,-0.66016 -1.08594,-1.05469 -1.84375,-1.01953z"
-            ></path>
-          </g>
-        </g>
-      </svg> -->
+      ></CircleCheckBig>
     </slot>
   </button>
 </template>
@@ -59,24 +17,25 @@ export default {
 <style scoped>
 .buttonDone {
   border-radius: 100%;
-  width: 22px;
-  height: 22px;
-  border: 1px solid gray;
+  /* width: 22px;
+  height: 22px; */
+  /* border: 1px solid gray; */
 }
 .buttonDone:hover {
   border: 1px solid green;
-  box-shadow: 0 0 5px 1px green;
+  background-color: rgba(0, 128, 0, 0.597);
+  /* box-shadow: 0 0 5px 1px green; */
 }
 .buttonNotDone {
   background-color: rgb(0, 58, 0);
   border-radius: 100%;
   width: 22px;
   height: 22px;
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
 }
 .buttonNotDone:hover {
   background-color: #800000;
   border: 1px solid #800000;
-  box-shadow: 0 0 5px 1px #800000;
+  /* box-shadow: 0 0 5px 1px #800000; */
 }
 </style>
