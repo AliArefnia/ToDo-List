@@ -111,7 +111,7 @@
 <script>
 import TaskItems from "./TaskItems.vue";
 import BaseRouterLinkList from "./ui/BaseRouterLinkList.vue";
-import validInput from "@/helpers/Validation.js";
+import validInput from "@/helpers/ValidationTaskListLength";
 
 export default {
   components: { TaskItems, BaseRouterLinkList },

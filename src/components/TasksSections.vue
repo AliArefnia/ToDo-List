@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import validInput from "@/helpers/Validation.js";
+import validInput from "@/helpers/ValidationTaskLength.js";
 
 export default {
   props: ["list"],
