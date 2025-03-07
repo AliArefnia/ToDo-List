@@ -4,8 +4,8 @@
       <section
         class="bg-zinc-600 min-w-[300px] w-[95vw] md:w-[500px] rounded-xl p-6 transition-all duration-300 relative"
         :class="{
-          'lg:h-[70vh] h-[475px]': loginIsSelected,
-          'lg:h-[80vh] h-[535px]': !loginIsSelected,
+          'lg:h-[65vh] h-[475px]': loginIsSelected,
+          'lg:h-[75vh] h-[535px]': !loginIsSelected,
         }"
       >
         <div class="w-full bg-zinc-400 rounded-md h-fit">
