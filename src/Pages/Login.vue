@@ -4,8 +4,8 @@
       <section
         class="bg-zinc-600 min-w-[300px] w-[95vw] md:w-[500px] rounded-xl p-6 transition-all duration-300 relative"
         :class="{
-          'h-[65vh]': loginIsSelected,
-          'h-[75vh]': !loginIsSelected,
+          'lg:h-[70vh] h-[65vh]': loginIsSelected,
+          'lg:h-[80vh] h-[75vh]': !loginIsSelected,
         }"
       >
         <div class="w-full bg-zinc-400 rounded-md h-fit">
@@ -60,6 +60,7 @@
             name="email"
             placeholder="Email Address"
             v-model="email"
+            autofocus
           />
 
           <!-- <label class="" for="password">Password:</label> -->

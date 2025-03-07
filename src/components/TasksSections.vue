@@ -2,7 +2,7 @@
   <div class="overflow-hidden">
     <div>
       <h2
-        class="lg:text-3xl md:text-2xl text-lg mb-2 font-mono italic uppercase text-rose-500 px-3 bg-zinc-600 rounded-xl inline-block w-full"
+        class="lg:text-3xl md:text-2xl text-lg mb-2 font-mono italic uppercase text-rose-500 px-3 bg-zinc-600 rounded-xl inline-block"
       >
         {{ list }}
       </h2>
