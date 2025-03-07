@@ -6,14 +6,22 @@ const body = document.querySelector("body");
 export default {
   data() {
     return {
-      notNavPage: true,
+      state: { notNavPage: true },
       route: "route",
+    };
+  },
+
+  provide() {
+    return {
+      state: this.state,
     };
   },
 
   watch: {
     "$route.name"(newRouteName) {
-      this.notNavPage = newRouteName !== "navigator";
+      newRouteName === "navigator"
+        ? (this.state.notNavPage = false)
+        : (this.state.notNavPage = true);
       console.log("Route name changed:", newRouteName);
       if (newRouteName === "navigator") {
         this.route = "route";
@@ -40,18 +48,18 @@ export default {
   <div
     class="text-white m-0 w-full flex rounded-2xl overflow-hidden"
     :class="{
-      'bg-black': !this.notNavPage,
-      'bg-priamry': this.notNavPage,
+      'bg-black': !this.state.notNavPage,
+      'bg-priamry': this.state.notNavPage,
     }"
   >
     <div class="flex w-full flex-col">
       <header
-        class="px-6 py-4"
+        class="pr-6 pl-2 py-4"
         v-if="
           this.$route.name !== 'login' && this.$route.name !== 'ResetPassword'
         "
       >
-        <RouterLink v-if="notNavPage" to="/navigator" class="flex w-fit">
+        <RouterLink v-if="state.notNavPage" to="/navigator" class="flex w-fit">
           <span class="flex items-center hover:brightness-150 w-fit">
             <ArrowLeftFromLine
               size="30"

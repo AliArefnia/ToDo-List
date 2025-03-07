@@ -29,8 +29,9 @@ import TasksLists from "@/components/TasksLists.vue";
 import { Sun, Star, Infinity } from "lucide-vue-next";
 export default {
   components: { TasksLists, Sun, Star, Infinity },
+  inject: ["state"],
   created() {
-    console.log(this.$route);
+    this.state.notNavPage = false;
   },
   methods: {
     logOut() {
