@@ -55,6 +55,7 @@ const router = createRouter({
       component: ResetPassword,
       meta: { requiresUnAuth: true },
     },
+    { path: "/:notfound(.*)", name: "notFound", redirect: "/" },
   ],
 });
 
