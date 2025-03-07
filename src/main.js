@@ -35,4 +35,6 @@ app.component("TasksSections", TasksSections);
 app.component("BaseSpinner", BaseSpinner);
 app.component("AlertModule", AlertModule);
 
-app.mount("#app");
+router.isReady().then(function () {
+  app.mount("#app");
+});
