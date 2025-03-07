@@ -4,13 +4,13 @@
       <section
         class="bg-zinc-600 min-w-[300px] w-[95vw] md:w-[500px] rounded-xl p-6 transition-all duration-300 relative"
         :class="{
-          'lg:h-[70vh] h-[65vh]': loginIsSelected,
-          'lg:h-[80vh] h-[75vh]': !loginIsSelected,
+          'lg:h-[70vh] h-[475px]': loginIsSelected,
+          'lg:h-[80vh] h-[535px]': !loginIsSelected,
         }"
       >
         <div class="w-full bg-zinc-400 rounded-md h-fit">
           <button
-            class="text-black rounded-md active:bg-gray-300 px-2 py-3 cursor-pointer transition-all duration-500 ease-in-out"
+            class="text-black text-lg rounded-md active:bg-gray-300 px-2 py-4 cursor-pointer transition-all duration-500 ease-in-out"
             :class="{
               'w-2/3 bg-white': loginIsSelected,
               'w-1/3 bg-zinc-400 hover:bg-[#9898b4] hover:text-white ':
@@ -21,7 +21,7 @@
             Log In
           </button>
           <button
-            class="text-black rounded-md active:bg-gray-300 px-2 py-3 cursor-pointer transition-all duration-500 ease-in-out"
+            class="text-black text-lg rounded-md active:bg-gray-300 px-2 py-4 cursor-pointer transition-all duration-500 ease-in-out"
             :class="{
               'w-2/3 bg-white': signupIsSelected,
               'w-1/3 bg-zinc-400 hover:bg-[#9898b4] hover:text-white':
@@ -33,7 +33,7 @@
           </button>
         </div>
 
-        <div class="w-full text-center text-2xl h-fit my-10 container">
+        <div class="w-full text-center text-2xl h-fit my-8 container">
           <transition name="text-swap" mode="out-in">
             <p :key="formIncommingMessage" class="font-mono text-rose-500">
               {{ formIncommingMessage }}
@@ -75,7 +75,7 @@
             <p
               v-if="loginIsSelected"
               to="ResetPassword"
-              class="text-rose-500 self-end font-mono text-sm md:text-md -mt-4 cursor-pointer mb-2"
+              class="text-rose-500 self-end font-mono text-sm md:text-md -mt-4 cursor-pointer mb-1"
               @click="resetPassword"
             >
               Forget password?
@@ -102,7 +102,7 @@
         </div>
         <transition name="text-swap">
           <BaseButton
-            class="submitButton w-full text-2xl opacity-100 h-[4rem] transition-transform"
+            class="submitButton w-full text-lg opacity-100 h-[4rem] transition-transform"
             :key="formSubmitButton"
             @click="submitData"
             >{{ formSubmitButton }}</BaseButton
