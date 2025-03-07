@@ -60,7 +60,7 @@
             name="email"
             placeholder="Email Address"
             v-model="email"
-            autofocus
+            v-focus
           />
 
           <!-- <label class="" for="password">Password:</label> -->

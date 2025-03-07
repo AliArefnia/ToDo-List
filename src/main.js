@@ -17,6 +17,7 @@ import Tasks from "./components/Tasks.vue";
 import TasksSections from "./components/TasksSections.vue";
 import BaseSpinner from "./components/ui/BaseSpinner.vue";
 import AlertModule from "./components/AlertModule.vue";
+import vFocus from "./directives/v-focus.js";
 
 const app = createApp(App);
 
@@ -34,6 +35,8 @@ app.component("Tasks", Tasks);
 app.component("TasksSections", TasksSections);
 app.component("BaseSpinner", BaseSpinner);
 app.component("AlertModule", AlertModule);
+
+app.directive("focus", vFocus);
 
 router.isReady().then(function () {
   app.mount("#app");
