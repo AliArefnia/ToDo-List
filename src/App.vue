@@ -25,12 +25,23 @@ export default {
       console.log("Route name changed:", newRouteName);
       if (newRouteName === "navigator") {
         this.route = "route";
-        body.classList = "bg-black lg:bg-priamry";
+        body.classList = "bg-priamry";
       } else {
         this.route = "nav";
-        body.classList = "bg-priamry lg:bg-black";
+        body.classList = "bg-black";
       }
     },
+    "state.notNavPage"(newNav) {
+      if (newNav === false) {
+        this.route = "route";
+        body.classList = "bg-priamry";
+      }
+      // else {
+      //   this.route = "nav";
+      //   body.classList = "bg-black";
+      // }
+    },
+
     "$store.getters.isAuthenticated"(newValue, oldValue) {
       if (!newValue) {
         this.$router.replace("/login");
@@ -45,13 +56,7 @@ export default {
 </script>
 
 <template>
-  <div
-    class="text-white m-0 w-full flex rounded-2xl overflow-hidden"
-    :class="{
-      'bg-black': !this.state.notNavPage,
-      'bg-priamry': this.state.notNavPage,
-    }"
-  >
+  <div class="text-white m-0 w-full flex rounded-2xl overflow-hidden">
     <div class="flex w-full flex-col">
       <header
         class="pr-6 pl-2 py-4"
