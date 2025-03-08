@@ -31,7 +31,7 @@
     <TransitionGroup
       tag="section"
       name="taskList"
-      class="flex flex-col overflow-auto basis-3/4 lg:w-5/6 lg:mx-auto"
+      class="flex flex-col overflow-auto basis-3/4"
     >
       <div id="loadingContainer" key="loadingContainer" class="text-xl">
         <p
@@ -51,7 +51,7 @@
         <BaseSpinner v-if="this.isLoading"></BaseSpinner>
       </div>
       <section
-        class="flex justify-between items-center w-[95%] border-b-1 border-b-neutral-800 flex-wrap"
+        class="flex justify-between items-center w-[95%] border-b-1 border-b-neutral-800 flex-wrap lg:w-5/6 lg:mx-auto"
         v-for="tasklist in tasksListsLocal"
         v-if="!this.isLoading"
       >
@@ -61,7 +61,7 @@
           :list="tasklist.name"
           class="w-5/6"
         >
-          <div class="min-w-1/2 max-w-5/6 lg:max-w-full">
+          <div class="min-w-1/2 max-w-5/6 lg:max-w-full text-left">
             {{ tasklist.name }}
           </div>
         </BaseRouterLinkList>
@@ -101,7 +101,7 @@
           v-if="notValidInput"
           class="flex text-red-700 pl-3 lg:ml-[6rem] mt-2 lg:w-5/6"
         >
-          Task can't be empty or too long!
+          List name can't be empty or too long!
         </p>
         <p
           v-else-if="repetitiveListName"
