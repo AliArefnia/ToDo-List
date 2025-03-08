@@ -208,6 +208,9 @@ export default {
       url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
     }
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -219,7 +222,11 @@ export default {
           password: payload.password,
           returnSecureToken: true,
         }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeout);
+
       const responseData = await response.json();
 
       if (!response.ok) {

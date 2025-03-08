@@ -182,6 +182,9 @@ export default {
         case "TOO_MANY_ATTEMPTS_TRY_LATER":
           return "too many attemps, try later!";
           break;
+        case "signal is aborted without reason":
+          return "Please check your VPN or internet connection";
+          break;
       }
     },
   },
