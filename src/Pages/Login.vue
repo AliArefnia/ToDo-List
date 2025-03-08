@@ -70,6 +70,7 @@
             name="password"
             placeholder="Password"
             v-model="password"
+            @keyup.enter="submitData"
           />
           <transition name="text-swap">
             <p
@@ -89,6 +90,7 @@
               name="password"
               placeholder="Repeat Password"
               v-model="passwordRepeat"
+              @keyup.enter="submitData"
             />
           </Transition>
           <transition name="text-swap">
@@ -105,6 +107,7 @@
             class="submitButton w-full text-lg opacity-100 h-[4rem] transition-transform"
             :key="formSubmitButton"
             @click="submitData"
+            @keyup.enter="submitData"
             >{{ formSubmitButton }}</BaseButton
           >
         </transition>

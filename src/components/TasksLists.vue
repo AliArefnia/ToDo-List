@@ -90,7 +90,7 @@
         class="w-full lg:w-5/6 px-3 bg-zinc-700 rounded-md h-[40px] outline-amber-50"
         placeholder="Enter Your List name here ..."
         v-model="newListName"
-        @keypress.enter="addList"
+        @keyup.enter="addList"
         @focus="inputFocused"
         ref="inputRef"
         @input="clearNotValidInput"
