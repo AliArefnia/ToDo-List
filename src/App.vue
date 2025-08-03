@@ -22,7 +22,6 @@ export default {
       newRouteName === "navigator"
         ? (this.state.notNavPage = false)
         : (this.state.notNavPage = true);
-      console.log("Route name changed:", newRouteName);
       if (newRouteName === "navigator") {
         this.route = "route";
         body.classList = "bg-priamry";

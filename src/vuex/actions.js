@@ -27,7 +27,6 @@ export default {
       }
       const id = responceData.name;
       context.commit("addNewTask", { ...payload, id });
-      console.warn("task  sent");
     } catch (error) {
       console.error("API Error:", error.message);
       throw error;
@@ -53,7 +52,6 @@ export default {
       const error = new Error(responceData.message || "Failed to fetch data");
       throw error;
     }
-    console.warn("task list sent");
     context.commit("addNewList", taskList);
   },
 
@@ -96,15 +94,11 @@ export default {
         tasks.push(task);
       }
     }
-    console.log(tasks);
     context.commit("setTasks", tasks);
-    console.warn("task received");
   },
 
   async receiveTasksLists(context, payload) {
     const { user, token } = getUserAuth(context);
-    console.log(user);
-    console.log(token);
     const responce = await fetch(
       `${URL}/users/${user}/tasksLists.json?auth=${token}`,
       {
@@ -113,7 +107,6 @@ export default {
     );
     const responceData = await responce.json();
 
-    console.log(responceData);
     if (!responce.ok) {
       const error = new Error(responceData.message || "Failed to fetch data");
       throw error;
@@ -130,7 +123,6 @@ export default {
     }
 
     context.commit("setTasksLists", tasksLists);
-    console.warn("task list received");
   },
 
   async deleteTask(context, taskId) {
@@ -149,7 +141,6 @@ export default {
       console.log("delete failed");
     }
     context.commit("removeTask", taskId);
-    console.log("Delete done");
   },
 
   async deleteTaskList(context, taskListId) {
@@ -173,7 +164,6 @@ export default {
 
   async toggleTaskStatus(context, { taskId, isFinished }) {
     const { user, token } = getUserAuth(context);
-    console.log(taskId, isFinished);
     const responce = await fetch(
       `${URL}/users/${user}/tasks/${taskId}.json?auth=${token}`,
       {
@@ -192,11 +182,9 @@ export default {
   },
 
   async signUp(context, payload) {
-    console.log("user signup");
     return context.dispatch("auth", { ...payload, mode: "signUp" });
   },
   async logIn(context, payload) {
-    console.log("user signup");
     return context.dispatch("auth", { ...payload, mode: "logIn" });
   },
 
@@ -230,18 +218,14 @@ export default {
       const responseData = await response.json();
 
       if (!response.ok) {
-        console.log(responseData);
         const error =
           new Error(responseData.error?.message) || "Failed to authenticate!";
-        console.log(responseData.error.message);
         throw error;
       }
 
       // const tokenExpirationTime = 20000;
       const tokenExpirationTime = responseData.expiresIn * 1000;
       const tokenExpirationDate = Date.now() + tokenExpirationTime;
-
-      console.log(tokenExpirationTime);
       const refreshToken = responseData.refreshToken;
       const userId = responseData.localId;
 
@@ -253,8 +237,6 @@ export default {
         context.dispatch("tryLogin");
       }, tokenExpirationTime - 60000);
 
-      console.log(responseData);
-
       context.commit("setUser", {
         token: responseData.idToken,
         userId: userId,
@@ -262,20 +244,17 @@ export default {
         tokenExpirationDate: tokenExpirationDate,
       });
     } catch (error) {
-      console.log(error.message);
       console.error("API Error:", error.message);
       throw error;
     }
   },
 
   async tryLogin(context) {
-    console.warn("tryLogin called");
     const userId = localStorage.getItem("userId");
     const refreshToken = localStorage.getItem("refreshToken");
     const tokenExpirationDate = localStorage.getItem("tokenExpirationDate");
 
     const tokenExpiration = +tokenExpirationDate - Date.now();
-    console.log(tokenExpiration);
     if (tokenExpiration < 0 || !refreshToken || !userId) {
       return context.dispatch("logOut");
     }
@@ -290,13 +269,9 @@ export default {
     timer = setTimeout(() => {
       context.dispatch("tryLogin");
     }, newTokenExpiration - 60000);
-
-    console.warn(timer);
-    console.log(refreshToken, userId, tokenExpirationDate);
   },
 
   logOut(context) {
-    console.log("logout");
     localStorage.removeItem("userId");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("tokenExpirationDate");
@@ -312,7 +287,6 @@ export default {
 
   async getNewTokens(context, payload) {
     try {
-      console.warn("getNewTokens called");
       const response = await fetch(
         `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
         {
@@ -331,27 +305,21 @@ export default {
 
       if (!response.ok) {
         if (responseData.error?.message === "TOKEN_EXPIRED") {
-          console.warn("Refresh token expired! Logging out...");
           return context.dispatch("logOut");
         }
         const error =
           new Error(responseData.error?.message) || "Failed to authenticate!";
-        console.log(responseData.error.message);
         throw error;
       }
 
-      console.log(responseData);
-
       const tokenExpirationDate = Date.now() + responseData.expires_in * 1000;
       // const tokenExpirationDate = Date.now() + 20000;
-      console.log(payload.userId);
       context.commit("setUser", {
         token: responseData.id_token,
         userId: payload.userId,
         refreshToken: responseData.refresh_token,
         tokenExpirationDate: tokenExpirationDate,
       });
-      console.log(context.state.userId);
 
       localStorage.setItem("refreshToken", responseData.refresh_token);
       localStorage.setItem("tokenExpirationDate", tokenExpirationDate);
@@ -375,12 +343,8 @@ export default {
 };
 
 function getUserAuth(context) {
-  console.warn("getUserAuth called");
   const user = context.getters.getUserId;
   const token = context.getters.getToken;
-  console.log(user);
-  console.log(token);
-
   if (!user || !token) {
     throw new Error("User not authenticated");
   }

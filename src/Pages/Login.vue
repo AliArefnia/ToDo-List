@@ -214,7 +214,6 @@ export default {
         return;
       }
 
-      console.log("reset pass");
       const userEmail = {
         email: this.email,
       };
@@ -239,9 +238,8 @@ export default {
         );
         throw error;
       }
-      console.log(this.$router);
+
       this.$router.replace("/ResetPassword");
-      console.log(responseData);
       // this.$store.dispatch("resetPassword",userEmail)
     },
 
@@ -278,7 +276,6 @@ export default {
         }
         this.$router.replace("/");
       } catch (error) {
-        console.log(error.message);
         this.error = error.message || "Failed to Auth";
       }
       this.isLoading = false;

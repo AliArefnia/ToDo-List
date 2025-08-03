@@ -7,15 +7,12 @@ export default {
   },
   setTasksLists(state, tasksList) {
     state.taskLists = tasksList;
-    console.log(state.taskLists);
   },
   addNewTask(state, task) {
     state.tasks.unshift(task);
-    console.log(state.tasks);
   },
   addNewList(state, taskList) {
     state.taskLists.unshift(taskList);
-    console.log(state.taskLists);
   },
   removeTask(state, taskId) {
     state.tasks = state.tasks.filter((task) => task.id !== taskId);

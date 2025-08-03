@@ -171,7 +171,6 @@ export default {
     },
 
     receiveTasksLists() {
-      console.log(this.tasksListsLocal);
       this.tasksListsLocal = this.$store.getters.getTasksLists;
       this.tasksListsLocal.map(
         (list) => (list.listPanelVisible = list.listPanelVisible || false)
@@ -184,7 +183,6 @@ export default {
           tasklist.listPanelVisible = !tasklist.listPanelVisible;
         }
       });
-      console.log(this.tasksListsLocal);
     },
 
     async addList() {
@@ -201,8 +199,6 @@ export default {
         name: this.newListName,
         id: Date.now(),
       });
-      console.log(this.tasksLists);
-      console.log(this.tasksListsLocal);
 
       this.newListName = "";
     },
@@ -228,7 +224,6 @@ export default {
   },
   created() {
     this.receiveTimer = setInterval(() => {
-      console.log("interval called");
       if (this.$store.getters.getNewTokensReceived) {
         this.loadTasksLists();
       }

@@ -203,7 +203,6 @@ export default {
 
   created() {
     this.receiveTimer = setInterval(() => {
-      console.log("interval called");
       if (this.$store.getters.getNewTokensReceived) {
         this.loadTasks();
       }
@@ -211,7 +210,6 @@ export default {
   },
   beforeUnmount() {
     this.$store.commit("clearTasks");
-    console.log("taskCleared");
   },
 };
 </script>
